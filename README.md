@@ -199,21 +199,26 @@ For the "I tuned one layer by hand, now make the other fifty follow" job.
 
 | Block | What's inside |
 | --- | --- |
-| ① Reference layer (style is copied from here) | Pick the reference layer ("Get current selection"). ⚠ **Layer Styles (drop shadow / stroke / outer glow / bevel) do NOT come along** — the AE scripting API doesn't expose them. To move those too, use `.ffx` (see "Things to watch out for" below) |
+| ① Reference layer (style is copied from here) | Pick the reference layer ("Get current selection"). **Layer Styles (drop shadow / stroke / outer glow / bevel) DO come along with "Rebuild from reference"** — that's AE's internal duplicate, not bound by the scripting API; only the property-by-property route can't reach them (see "Things to watch out for" below) |
 | ② Which layers to apply to | Layer numbers accept `1-10`, `1,5,10`, `1-3,7,9-11`; "text layers only"; "skip the reference layer itself" |
 | ③ Bilingual layers (when original / translation are paired) | For paired originals and translations: specify which reference layer "the other group" uses; scope (all / same group as the reference only / the other group only); **bilingual position** (copy the reference exactly = the two groups stack on top of each other / keep the vertical offset = recommended / don't touch at all); line spacing; "scan the grouping" to check that pairing was recognised correctly |
 | ④ What to copy | Text style, optionally overwrite the text content (off by default, so each layer keeps its own lyric), transform properties, layer properties (blend mode / 3D / motion blur / label colour), keyframes, easing and interpolation curves, copy static values when there are no keyframes, expressions, effects (the whole effect stack), masks, text animators<br>**Keyframe alignment**: scale to each layer's in/out point (recommended) / shift as a block to keep the original rhythm / leave alone (keep absolute time) |
 
-How the three action buttons differ:
+How the two action buttons differ:
 
 | Button | What it does | When to use it |
 | --- | --- | --- |
-| Apply to target layers | Deep-copies the reference layer's properties onto each target layer, one by one; text content is left alone | Layers already exist and you only want a uniform look |
-| Rebuild from reference (like Ctrl+D) | Duplicates the reference layer itself (AE's internal duplicate — style / effects / animators / masks all come along), then writes each layer's original text and in/out points back, then deletes the old layers | The scripted Ctrl+D-and-retype; the style is least likely to drift |
+| Rebuild from reference (like Ctrl+D) | Duplicates the reference layer itself (AE's internal duplicate — style / effects / animators / masks / layer styles all come along), then writes each layer's original text and in/out points back, then deletes the old layers; bilingual pairs get their vertical offset restored automatically | The scripted Ctrl+D-and-retype; the style is least likely to drift |
 | Text style only (lightest) | Lightest touch: only font / size / colour / stroke / line spacing / tracking / alignment | You only want a uniform font and nothing else touched |
 
 > ⚠ "Rebuild from reference" **deletes the original layers** (the whole operation is one undo
 > step, so Ctrl+Z brings them back). Save your project before running it.
+
+> Older versions also had an "Apply to target layers" button (deep-copies the reference
+> layer's properties onto each target layer, without deleting anything). It has been **hidden
+> from the panel**: it can't carry Layer Styles, so subtitles often came out with the styling
+> missing — clearly worse than Rebuild. The code is still there; `docs/开发文档.md` explains how
+> to bring it back when you need a non-destructive sync.
 
 #### Online
 
@@ -288,18 +293,20 @@ Identical to the AE version.
 2. **"Rebuild from reference" deletes the original layers.** The whole operation is a single undo
    step, so Ctrl+Z brings them back; but once you edit something else afterwards, undo gets
    messy — save your project first.
-3. **Layer Styles (drop shadow / stroke / outer glow / bevel & emboss) can't be synced.** The AE
-   scripting API doesn't expose them.
-   To move them too: select the reference layer → menu "Animation > Save Animation Preset" and
-   save as `.ffx` → then pick it in block ⑦ of the Import tab.
+3. **Layer Styles (drop shadow / stroke / outer glow / bevel & emboss) only come along with
+   "Rebuild from reference"** — that's AE's internal `duplicate()`, not bound by the scripting
+   API, so this block takes care of itself.
+   If you ever go back to the property-by-property route, that one can't reach Layer Styles and
+   you'd have to use `.ffx`: select the reference layer → menu "Animation > Save Animation
+   Preset" and save as `.ffx` → then pick it in block ⑦ of the Import tab.
    If it's only a stroke, both "text property → stroke" and "Effect → Generate → Stroke" do sync.
 4. **Vertical text depends on your AE version.** AE 2024 (24.2) and later use native vertical
    text; older versions fall back to a simulated "one character per line" approach — workable,
    but less refined than native, and punctuation placement may differ slightly.
-5. **The panel "freezes" during long jobs.** Generating / syncing / searching are all synchronous
-   and blocking; while the script runs the panel won't respond. That's the host communication
-   mechanism, not a crash. Watch the status bar at the bottom of the panel, and don't click
-   repeatedly.
+5. **The host "freezes" during long jobs.** Generating / syncing / searching are all synchronous
+   and blocking; while the script runs the host won't respond. That's the host communication
+   mechanism, not a crash. Watch the status bar at the bottom of the panel (sync / rebuild count
+   layer by layer, e.g. `3/10`), let it finish, and don't click repeatedly.
 6. **Online lyrics only cover NetEase Cloud Music and QQ Music**, and need an internet
    connection. Lyrics come from public endpoints; accuracy and copyright belong to the platforms
    and songwriters. Please use them for personal study and research only.

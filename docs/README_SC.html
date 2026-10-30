@@ -922,7 +922,7 @@ lyric_modules/           ← 文件夹，里面是各模块 .jsx
 <tbody>
 <tr>
 <td>① 参考图层</td>
-<td>选参考层（「获取当前选中图层」）。⚠ <strong>「图层样式」（投影 / 描边 / 外发光 / 斜面）跟不走</strong> —— AE 脚本接口没开放这些，要连它一起搬就用 <code>.ffx</code>（见下方「注意事项」）</td>
+<td>选参考层（「获取当前选中图层」）。<strong>「图层样式」（投影 / 描边 / 外发光 / 斜面）能跟着「以参考图层重建」一起搬走</strong> —— 那是 AE 内部复制，不受脚本接口限制；只有逐属性同步那种做法抄不到它（见下方「注意事项」）</td>
 </tr>
 <tr>
 <td>② 应用到哪些图层</td>
@@ -938,7 +938,7 @@ lyric_modules/           ← 文件夹，里面是各模块 .jsx
 </tr>
 </tbody>
 </table>
-<p class="source-line" data-source-line="195">三个动作按钮的区别：</p>
+<p class="source-line" data-source-line="195">两个动作按钮的区别：</p>
 <table class="source-line" data-source-line="197">
 <thead>
 <tr>
@@ -949,13 +949,8 @@ lyric_modules/           ← 文件夹，里面是各模块 .jsx
 </thead>
 <tbody>
 <tr>
-<td>应用到目标图层</td>
-<td>把参考层的属性<strong>逐个深拷贝</strong>到目标层，文字内容不动</td>
-<td>图层已经生成好，只想统一外观</td>
-</tr>
-<tr>
 <td>以参考图层重建</td>
-<td>复制参考层本身（AE 内部复制，样式/效果/动画器/蒙版全带），再把每层原来的文字和入出点写回去，最后删掉旧层</td>
+<td>复制参考层本身（AE 内部复制，样式 / 效果 / 动画器 / 蒙版 / 图层样式全带），再把每层原来的文字和入出点写回去，最后删掉旧层；双语会按组内行号自动错位</td>
 <td>等价于手动 Ctrl+D 再改字，样式最不容易跑偏</td>
 </tr>
 <tr>
@@ -968,6 +963,9 @@ lyric_modules/           ← 文件夹，里面是各模块 .jsx
 <blockquote>
 <p class="source-line" data-source-line="203">⚠ 「以参考图层重建」<strong>会删掉原图层</strong>（整个操作在一步撤销里，Ctrl+Z 能回来）。<br>
 动手前先存工程。</p>
+</blockquote>
+<blockquote>
+<p class="source-line" data-source-line="206">旧版本还有一个「应用到目标图层」（把参考层属性逐个深拷贝到目标层、不删层），已经<strong>从面板隐藏</strong>：它抄不走「图层样式」，做出来的字幕经常样式跟不上，效果明显不如重建。代码仍然保留，需要非破坏性同步时可以放回来，方法见 <code>docs/开发文档.md</code>。</p>
 </blockquote>
 <h4 id="在线歌词" class="source-line" data-source-line="206">在线歌词<a class="vx-header-anchor" href="#在线歌词" vx-data-anchor-icon="¶"></a></h4>
 <p class="source-line" data-source-line="208">平台（网易云音乐 / QQ 音乐）→ 关键词（歌名、歌手、歌曲链接、歌曲 ID 都行）→「搜索」→<br>
@@ -1060,14 +1058,15 @@ PR 不允许脚本删除字幕轨，重复生成多出来的右键删掉。</p>
 <li class="source-line" data-source-line="265"><strong>装完必须「完全退出」宿主再重启</strong>。只关窗口不算 —— CEP 扩展和脚本引擎都是进程启动时加载的。</li>
 <li class="source-line" data-source-line="266"><strong>「以参考图层重建」会删掉原图层</strong>。整个操作在一步撤销里，Ctrl+Z 能撤回；<br>
 但只要之后又做了别的编辑，撤销就变复杂了 —— 动手前先存工程。</li>
-<li class="source-line" data-source-line="268"><strong>图层样式（投影 / 描边 / 外发光 / 斜面浮雕）同步不了</strong>。AE 脚本接口没开放。<br>
-要连它一起搬：选中参考层 → 菜单「动画 &gt; 将动画预设另存为」存成 <code>.ffx</code><br>
-→ 去「歌词导入」页 ⑦ 选它套用。<br>
+<li class="source-line" data-source-line="268"><strong>图层样式（投影 / 描边 / 外发光 / 斜面浮雕）只有「以参考图层重建」带得走</strong>。<br>
+它是 AE 内部的 <code>duplicate()</code>，不受脚本接口限制，所以这一块不用管。<br>
+如果哪天要用回「逐属性同步」那条老路，那部分抄不到图层样式，只能走 <code>.ffx</code>：<br>
+选中参考层 → 菜单「动画 &gt; 将动画预设另存为」存成 <code>.ffx</code> → 去「歌词导入」页 ⑦ 选它套用。<br>
 只是描边的话，「文字属性 → 描边」或「效果 → 生成 → 描边」这两样是能同步的。</li>
 <li class="source-line" data-source-line="272"><strong>竖排文字有版本要求</strong>。AE 2024（24.2）及以上走原生竖排；更早版本自动降级成<br>
 「逐字换行」仿真方案，能用但不如原生精细，标点位置也可能略有差异。</li>
-<li class="source-line" data-source-line="274"><strong>长任务期间面板会「卡住」</strong>。生成 / 同步 / 搜索都是同步阻塞的，脚本在跑时面板点不动，<br>
-这是宿主通讯机制决定的，不是死机。进度看面板底部状态栏，别反复点。</li>
+<li class="source-line" data-source-line="274"><strong>长任务期间宿主会「卡住」</strong>。生成 / 同步 / 搜索都是同步阻塞的，脚本在跑时宿主点不动，<br>
+这是宿主通讯机制决定的，不是死机。进度看面板底部状态栏（同步 / 重建会逐层显示 <code>3/10</code>），等它回来就行，别反复点。</li>
 <li class="source-line" data-source-line="276"><strong>在线歌词只有网易云和 QQ 音乐两个平台</strong>，需要联网。歌词来自公开接口，<br>
 内容准确性和版权归各平台与词曲作者，请仅用于个人学习研究。</li>
 <li class="source-line" data-source-line="278"><strong>面板设置不跟着工程走</strong>。界面设置（含语言）存在 CEP 的浏览器本地存储里，<br>

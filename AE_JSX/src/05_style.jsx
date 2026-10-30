@@ -943,17 +943,40 @@
      * @param comp     目标合成
      * @param refLayer 参考图层
      * @param targets  要被替换的 Layer 对象数组（注意是对象不是编号，删层会让编号失效）
-     * @param opts     { remapMode, keepName, onProgress }
+     * @param opts     { remapMode, keepName, onProgress, biScope, biPos, biStep, refLayer2 }
      */
     ST.rebuildFromReference = function (comp, refLayer, targets, opts) {
         var o = opts || {};
         var mode = o.remapMode === undefined ? "scale" : o.remapMode;
-        var report = { total: 0, ok: 0, remapped: 0, skipped: 0, errors: [] };
+        var report = {
+            total: 0, ok: 0, remapped: 0, skipped: 0, errors: [],
+            staggered: 0, scopeSkipped: 0, groups: { same: 0, other: 0 }
+        };
         if (!comp || !refLayer || !targets || targets.length === 0) { return report; }
 
-        var rIn = 0, rOut = comp.duration;
-        try { rIn = refLayer.inPoint; } catch (e0) { }
-        try { rOut = refLayer.outPoint; } catch (e1) { }
+        /* ---------------------------------------------------------- 双语分组
+         *
+         * 重建是「整层复制」，复制出来的层**位置就是参考层的位置**。双语成对的
+         * 原文 / 译文如果都照抄参考层，就会落在同一个 Y 上叠着 —— 用户看到的就是
+         * 「两句压在一起」。所以这里和 applyToLayers 用同一套判定（LY.roleOf：
+         * 先看图层备注里的 [ST] 标记，没有标记就比文字体系），再按「组内第几行」
+         * 把位置挪回去。
+         *
+         * 默认值刻意是 all + follow（= 加这个功能之前的老行为）：
+         * 老调用方不传这几个参数就完全不变。
+         */
+        var biScope = o.biScope || "all";
+        var biPos = o.biPos || "follow";
+        var ref2 = o.refLayer2 || null;
+        var baseSub = 0;
+        try { baseSub = LY.roleOf(refLayer, refLayer).sub; } catch (eR0) { }
+
+        var ctx = buildContext(o);
+        /* 给「完全不动位置」单独准备一份：重建传进来的 opts 里没有这些开关 */
+        var keepPosOpts = {
+            keyframes: true, values: true,
+            keyframeInterpolation: true, keyframeEase: true, expressions: true
+        };
 
         function progress(done, total) {
             if (typeof o.onProgress === "function") {
@@ -967,7 +990,20 @@
                 var tgt = targets[i];
                 report.total++;
                 if (!tgt) { report.skipped++; continue; }
-                if (tgt === refLayer) { report.skipped++; continue; }
+                if (tgt === refLayer || (ref2 && tgt === ref2)) { report.skipped++; continue; }
+
+                /* 认角色 → 决定「处理不处理」「用哪个参考层」 */
+                var role = null;
+                try { role = LY.roleOf(tgt, refLayer); } catch (eR1) { role = null; }
+                if (role) {
+                    if (role.sameAsRef) { report.groups.same++; } else { report.groups.other++; }
+                }
+                if (role && biScope === "same" && !role.sameAsRef) { report.scopeSkipped++; continue; }
+                if (role && biScope === "other" && role.sameAsRef) { report.scopeSkipped++; continue; }
+
+                /* 有第二个参考层时，另一组从它复制 —— 那一组的位置本来就该跟着 ref2 走 */
+                var src = refLayer, slot = "";
+                if (ref2 && role && !role.sameAsRef) { src = ref2; slot = "2"; }
 
                 var oldText = LY.getLayerText(tgt);
                 var oldName = "";
@@ -975,12 +1011,25 @@
                 var tIn = 0, tOut = comp.duration;
                 try { tIn = tgt.inPoint; } catch (e2) { }
                 try { tOut = tgt.outPoint; } catch (e3) { }
+                var sIn = 0, sOut = comp.duration;
+                try { sIn = src.inPoint; } catch (e4) { }
+                try { sOut = src.outPoint; } catch (e5) { }
+
+                /* 「完全不动位置」：先把目标层自己的 Position 留一份，
+                 * 等复制完、关键帧对时之后再盖回去（顺序反了会被重映射带歪）。 */
+                var keepPos = null;
+                if (biPos === "keep") {
+                    keepPos = safe(function () {
+                        return tgt.property(LY.MATCH.TRANSFORM).property(LY.MATCH.POSITION);
+                    }, null);
+                }
+
                 var wasLocked = false;
                 try { wasLocked = tgt.locked; } catch (eL) { }
                 if (wasLocked) { try { tgt.locked = false; } catch (eL2) { } }
 
                 var dup = null;
-                try { dup = refLayer.duplicate(); } catch (eD) {
+                try { dup = src.duplicate(); } catch (eD) {
                     report.errors.push(SB.M("「%1」复制失败：%2", oldName, eD.toString()));
                     report.skipped++;
                     continue;
@@ -993,13 +1042,31 @@
                 try { dup.inPoint = tIn; } catch (eI) { }
                 try { dup.outPoint = tOut; } catch (eO) { }
 
-                /* ③ 关键帧对时 */
+                /* ③ 关键帧对时（从**实际用的那个**参考层的时间范围映射过来） */
                 if (mode !== "none") {
-                    var rm = ST.remapLayerKeys(dup, rIn, rOut, tIn, tOut, mode);
+                    var rm = ST.remapLayerKeys(dup, sIn, sOut, tIn, tOut, mode);
                     report.remapped += rm.keys;
                 }
 
-                /* 放到原来那一层的位置，再删掉旧的 */
+                /* ④ 位置：keep 整条搬回目标层原来的 Position；
+                 *    stagger 按组内行号错开（用的是 ref2 的那组不动，它本来就在译文位置） */
+                if (keepPos) {
+                    var dpPos = safe(function () {
+                        return dup.property(LY.MATCH.TRANSFORM).property(LY.MATCH.POSITION);
+                    }, null);
+                    if (dpPos) { ST.copyProperty(keepPos, dpPos, keepPosOpts, ctx); }
+                } else if (biPos === "stagger" && !slot && role && role.sub !== baseSub) {
+                    var stepPx = o.biStep;
+                    if (!(stepPx > 0)) {
+                        var fs = LY.fontSizeOf(dup);
+                        stepPx = (fs > 0 ? fs : 60) * 1.25;
+                    }
+                    if (LY.shiftLayerY(dup, (role.sub - baseSub) * stepPx)) {
+                        report.staggered++;
+                    }
+                }
+
+                /* ⑤ 放到原来那一层的位置，再删掉旧的 */
                 try {
                     if (typeof dup.moveBefore === "function") { dup.moveBefore(tgt); }
                 } catch (eM) { }

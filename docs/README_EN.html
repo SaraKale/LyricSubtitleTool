@@ -935,7 +935,7 @@ End early</strong> and click generate once more.</p>
 <tbody>
 <tr>
 <td>① Reference layer (style is copied from here)</td>
-<td>Pick the reference layer ("Get current selection"). ⚠ <strong>Layer Styles (drop shadow / stroke / outer glow / bevel) do NOT come along</strong> — the AE scripting API doesn't expose them. To move those too, use <code>.ffx</code> (see "Things to watch out for" below)</td>
+<td>Pick the reference layer ("Get current selection"). <strong>Layer Styles (drop shadow / stroke / outer glow / bevel) DO come along with "Rebuild from reference"</strong> — that's AE's internal duplicate, not bound by the scripting API; only the property-by-property route can't reach them (see "Things to watch out for" below)</td>
 </tr>
 <tr>
 <td>② Which layers to apply to</td>
@@ -951,7 +951,7 @@ End early</strong> and click generate once more.</p>
 </tr>
 </tbody>
 </table>
-<p class="source-line" data-source-line="206">How the three action buttons differ:</p>
+<p class="source-line" data-source-line="206">How the two action buttons differ:</p>
 <table class="source-line" data-source-line="208">
 <thead>
 <tr>
@@ -962,13 +962,8 @@ End early</strong> and click generate once more.</p>
 </thead>
 <tbody>
 <tr>
-<td>Apply to target layers</td>
-<td>Deep-copies the reference layer's properties onto each target layer, one by one; text content is left alone</td>
-<td>Layers already exist and you only want a uniform look</td>
-</tr>
-<tr>
 <td>Rebuild from reference (like Ctrl+D)</td>
-<td>Duplicates the reference layer itself (AE's internal duplicate — style / effects / animators / masks all come along), then writes each layer's original text and in/out points back, then deletes the old layers</td>
+<td>Duplicates the reference layer itself (AE's internal duplicate — style / effects / animators / masks / layer styles all come along), then writes each layer's original text and in/out points back, then deletes the old layers; bilingual pairs get their vertical offset restored automatically</td>
 <td>The scripted Ctrl+D-and-retype; the style is least likely to drift</td>
 </tr>
 <tr>
@@ -981,6 +976,9 @@ End early</strong> and click generate once more.</p>
 <blockquote>
 <p class="source-line" data-source-line="214">⚠ "Rebuild from reference" <strong>deletes the original layers</strong> (the whole operation is one undo<br>
 step, so Ctrl+Z brings them back). Save your project before running it.</p>
+</blockquote>
+<blockquote>
+<p class="source-line" data-source-line="217">Older versions also had an "Apply to target layers" button (deep-copies the reference layer's properties onto each target layer, without deleting anything). It has been <strong>hidden from the panel</strong>: it can't carry Layer Styles, so subtitles often came out with the styling missing — clearly worse than Rebuild. The code is still there; <code>docs/开发文档.md</code> explains how to bring it back when you need a non-destructive sync.</p>
 </blockquote>
 <h4 id="online" class="source-line" data-source-line="217">Online<a class="vx-header-anchor" href="#online" vx-data-anchor-icon="¶"></a></h4>
 <p class="source-line" data-source-line="219">Platform (NetEase Cloud Music / QQ Music) → keyword (song title, artist, song link or song ID all<br>
@@ -1084,18 +1082,18 @@ count — CEP extensions and the script engine are both loaded at process start.
 <li class="source-line" data-source-line="287"><strong>"Rebuild from reference" deletes the original layers.</strong> The whole operation is a single undo<br>
 step, so Ctrl+Z brings them back; but once you edit something else afterwards, undo gets<br>
 messy — save your project first.</li>
-<li class="source-line" data-source-line="290"><strong>Layer Styles (drop shadow / stroke / outer glow / bevel &amp; emboss) can't be synced.</strong> The AE<br>
-scripting API doesn't expose them.<br>
-To move them too: select the reference layer → menu "Animation &gt; Save Animation Preset" and<br>
-save as <code>.ffx</code> → then pick it in block ⑦ of the Import tab.<br>
+<li class="source-line" data-source-line="290"><strong>Layer Styles (drop shadow / stroke / outer glow / bevel &amp; emboss) only come along with "Rebuild from reference"</strong> —<br>
+that's AE's internal <code>duplicate()</code>, not bound by the scripting API, so this block takes care of itself.<br>
+If you ever go back to the property-by-property route, that one can't reach Layer Styles and you'd have to use <code>.ffx</code>:<br>
+select the reference layer → menu "Animation &gt; Save Animation Preset" and save as <code>.ffx</code> → then pick it in block ⑦ of the Import tab.<br>
 If it's only a stroke, both "text property → stroke" and "Effect → Generate → Stroke" do sync.</li>
 <li class="source-line" data-source-line="295"><strong>Vertical text depends on your AE version.</strong> AE 2024 (24.2) and later use native vertical<br>
 text; older versions fall back to a simulated "one character per line" approach — workable,<br>
 but less refined than native, and punctuation placement may differ slightly.</li>
-<li class="source-line" data-source-line="298"><strong>The panel "freezes" during long jobs.</strong> Generating / syncing / searching are all synchronous<br>
-and blocking; while the script runs the panel won't respond. That's the host communication<br>
-mechanism, not a crash. Watch the status bar at the bottom of the panel, and don't click<br>
-repeatedly.</li>
+<li class="source-line" data-source-line="298"><strong>The host "freezes" during long jobs.</strong> Generating / syncing / searching are all synchronous<br>
+and blocking; while the script runs the host won't respond. That's the host communication<br>
+mechanism, not a crash. Watch the status bar at the bottom of the panel (sync / rebuild count<br>
+layer by layer, e.g. <code>3/10</code>), let it finish, and don't click repeatedly.</li>
 <li class="source-line" data-source-line="302"><strong>Online lyrics only cover NetEase Cloud Music and QQ Music</strong>, and need an internet<br>
 connection. Lyrics come from public endpoints; accuracy and copyright belong to the platforms<br>
 and songwriters. Please use them for personal study and research only.</li>

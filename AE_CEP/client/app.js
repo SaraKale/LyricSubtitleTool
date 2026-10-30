@@ -129,8 +129,8 @@
         songs: [],
         translated: "",
         build: "?",          // 构建时间戳（排查用：确认 AE 里跑的是不是刚装的那版）
-        version: "",         // 1.0.0
-        versionDate: "",     // 2026-09-20
+        version: "1.0.1",         // 1.0.0
+        versionDate: "2026-10-30",     // 2026-09-20
         ae: "",              // AE 版本 / build
         engine: "",          // ExtendScript 版本
         progPath: "",        // 宿主给的进度文件路径（长动作的实时进度，见 progPoll）
@@ -1391,7 +1391,9 @@
         $("biScope").onchange = function () { updateBiInfo(); };
         $("biStep").oninput = function () { updateBiInfo(); };
 
-        $("btnApply").onclick = function () { doApplyStyle(); };
+        /* 「应用到目标图层」的按钮现在藏在 HTML 里（display:none，原因见 index.html 的注释）。
+         * 绑定时判一下：哪天彻底删掉这个元素，这里也不会抛「读不到 onclick」。 */
+        if ($("btnApply")) { $("btnApply").onclick = function () { doApplyStyle(); }; }
         $("btnRefRebuild").onclick = function () { doRebuild(); };
         $("btnRefCopyOnly").onclick = function () { doStyleTextOnly(); };
 

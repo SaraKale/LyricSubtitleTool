@@ -1755,13 +1755,16 @@
             var spec = U.parseIndexSpec(R.indexSpec.text, comp.numLayers);
             if (spec.error) { notice("图层号有误：" + spec.error); return; }
 
+            /* 第二参考层本身不能被当成目标重建掉 */
+            var ref2 = getRef2Layer();
+
             /* 先收集 Layer 对象：删层会让编号失效，所以绝不能边删边按编号取 */
             var targets = [];
             var names = [];
             for (var i = 0; i < spec.list.length; i++) {
                 var L = null;
                 try { L = comp.layer(spec.list[i]); } catch (eL) { }
-                if (!L || L === ref) { continue; }
+                if (!L || L === ref || (ref2 && L === ref2)) { continue; }
                 if (R.optOnlyText.value && !(L instanceof TextLayer)) { continue; }
                 targets.push(L);
                 if (names.length < 4) { names.push("#" + L.index + " " + L.name); }
@@ -1782,12 +1785,21 @@
             var rmSel = R.remapMode && R.remapMode.selection ? R.remapMode.selection.index : 0;
             var mode = ["scale", "shift", "none"][rmSel];
 
+            /* 双语：和「应用到目标图层」共用同一组控件（范围 / 位置 / 行距 / 第二参考层） */
+            var biScopeIdx = (R.biScope && R.biScope.selection) ? R.biScope.selection.index : 0;
+            var biPosIdx = (R.biPos && R.biPos.selection) ? R.biPos.selection.index : 1;
+            var biStepPx = (R.biStep && parseFloat(R.biStep.text) > 0) ? parseFloat(R.biStep.text) : 0;
+
             setStatus("正在重建 0/" + targets.length + "\u2026\u2026");
             if (R.styleResult) { R.styleResult.text = "正在以参考图层重建\u2026\u2026"; }
             repaint();
 
             var rep = ST.rebuildFromReference(comp, ref, targets, {
                 remapMode: mode,
+                biScope: ["all", "same", "other"][biScopeIdx],
+                biPos: ["follow", "stagger", "keep"][biPosIdx],
+                biStep: biStepPx,
+                refLayer2: ref2,
                 onProgress: function (done, total) {
                     if (done > 0 && done % 5 !== 0 && done < total) { return; }
                     setStatus("正在重建 " + done + "/" + total + "\u2026\u2026");
@@ -1800,6 +1812,14 @@
             lines.push("关键帧对时：" + rep.remapped + " 个（" +
                 (mode === "scale" ? "缩放到每层入点出点" : (mode === "shift" ? "整体平移" : "不处理")) + "）");
             if (rep.skipped > 0) { lines.push("跳过：" + rep.skipped + " 个"); }
+            /* 双语的结果要写出来：不然「原文译文叠在一起」用户看不出来是哪一步的锅 */
+            var gg = rep.groups || { same: 0, other: 0 };
+            if (gg.same + gg.other > 0) {
+                lines.push("双语分组：与参考层同组 " + gg.same + " 层、另一组 " + gg.other + " 层" +
+                    (rep.scopeSkipped > 0 ? ("（本次跳过 " + rep.scopeSkipped + " 层）") : ""));
+            }
+            if (rep.staggered > 0) { lines.push("已按组内行号错开：" + rep.staggered + " 层"); }
+            if (ref2) { lines.push("另一组用的是第二个参考层 #" + ref2.index + "「" + ref2.name + "」"); }
             if (rep.errors.length > 0) {
                 lines.push("—— 有 " + rep.errors.length + " 条报错 ——");
                 for (var j = 0; j < Math.min(rep.errors.length, 6); j++) {
@@ -2653,8 +2673,16 @@
             "「平移」= 只把整段动画挪到这一层的入点上，节奏长度不变。";
 
         var g4 = row(tab);
-        R.btnApply = g4.add("button", undefined, "应用到目标图层");
-        R.btnApply.preferredSize.width = 160;
+        /* 「应用到目标图层」暂时不暴露 —— 逐属性抄带不走图层样式（AE 脚本接口没开放
+         * 投影 / 描边 / 外发光），用户拿它做出来的字幕经常「样式没跟上」；而「以参考
+         * 图层重建」是 duplicate()，AE 内部复制，样式 / 效果 / 动画器 / 蒙版全带得走，
+         * 双语错位也已经补上，效果明显更好。
+         *
+         * 这里**不能**用 visible = false 藏：见文件头第 1 条 —— 控件不画了但位置还占着，
+         * 那排按钮会留一个空档。要恢复就取消下面两行的注释，并把 onClick 那行的 if 去掉。 */
+        R.btnApply = null;
+        // R.btnApply = g4.add("button", undefined, "应用到目标图层");
+        // R.btnApply.preferredSize.width = 160;
         R.btnRefRebuild = g4.add("button", undefined, "以参考图层重建（Ctrl+D 式）");
         R.btnRefRebuild.helpTip =
             "不走「逐属性抄」，而是直接复制参考图层（AE 内部复制，图层样式/效果/\n" +
@@ -2673,7 +2701,7 @@
         R.btnRefRefresh.onClick = function () { refreshRefLayers(); };
         R.refList.onChange = function () { updateRefInfo(); };
         R.btnRefPick.onClick = function () { pickSelectedLayer(); };
-        R.btnApply.onClick = function () { doApplyStyle(); };
+        if (R.btnApply) { R.btnApply.onClick = function () { doApplyStyle(); }; }
         R.btnRefRebuild.onClick = function () { doRebuildFromRef(); };
         R.btnRefCopyOnly.onClick = function () {
             try {

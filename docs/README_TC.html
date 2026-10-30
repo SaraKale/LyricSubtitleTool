@@ -921,7 +921,7 @@ lyric_modules/           ← 資料夾，裡面是各模組 .jsx
 <tbody>
 <tr>
 <td>① 參考圖層</td>
-<td>選參考層（「取得目前選取圖層」）。⚠ <strong>「圖層樣式」（陰影 / 描邊 / 外光暈 / 斜角）跟不走</strong> —— AE 腳本介面沒開放這些，要連它一起搬就用 <code>.ffx</code>（見下方「注意事項」）</td>
+<td>選參考層（「取得目前選取圖層」）。<strong>「圖層樣式」（陰影 / 描邊 / 外光暈 / 斜角）能跟著「以參考圖層重建」一起搬走</strong> —— 那是 AE 內部複製，不受腳本介面限制；只有逐一屬性同步那種做法抄不到它（見下方「注意事項」）</td>
 </tr>
 <tr>
 <td>② 應用到哪些圖層</td>
@@ -937,7 +937,7 @@ lyric_modules/           ← 資料夾，裡面是各模組 .jsx
 </tr>
 </tbody>
 </table>
-<p class="source-line" data-source-line="192">三個動作按鈕的差別：</p>
+<p class="source-line" data-source-line="192">兩個動作按鈕的差別：</p>
 <table class="source-line" data-source-line="194">
 <thead>
 <tr>
@@ -948,13 +948,8 @@ lyric_modules/           ← 資料夾，裡面是各模組 .jsx
 </thead>
 <tbody>
 <tr>
-<td>應用到目標圖層</td>
-<td>把參考層的屬性<strong>逐一深拷貝</strong>到目標層，文字內容不動</td>
-<td>圖層已經生成好，只想統一外觀</td>
-</tr>
-<tr>
 <td>以參考圖層重建</td>
-<td>複製參考層本身（AE 內部複製，樣式/效果/動畫器/遮罩全帶），再把每層原來的文字和入出點寫回去，最後刪掉舊層</td>
+<td>複製參考層本身（AE 內部複製，樣式 / 效果 / 動畫器 / 遮罩 / 圖層樣式全帶），再把每層原來的文字和入出點寫回去，最後刪掉舊層；雙語會依組內行號自動錯位</td>
 <td>等於手動 Ctrl+D 再改字，樣式最不容易跑偏</td>
 </tr>
 <tr>
@@ -967,6 +962,9 @@ lyric_modules/           ← 資料夾，裡面是各模組 .jsx
 <blockquote>
 <p class="source-line" data-source-line="200">⚠ 「以參考圖層重建」<strong>會刪掉原圖層</strong>（整個操作在一步復原裡，Ctrl+Z 能回來）。<br>
 動手前先存專案。</p>
+</blockquote>
+<blockquote>
+<p class="source-line" data-source-line="203">舊版本還有一個「應用到目標圖層」（把參考層屬性逐一深拷貝到目標層、不刪層），已經<strong>從面板隱藏</strong>：它抄不走「圖層樣式」，做出來的字幕常常樣式跟不上，效果明顯不如重建。程式碼仍然保留，需要非破壞性同步時可以放回來，方法見 <code>docs/开发文档.md</code>。</p>
 </blockquote>
 <h4 id="線上歌詞" class="source-line" data-source-line="203">線上歌詞<a class="vx-header-anchor" href="#線上歌詞" vx-data-anchor-icon="¶"></a></h4>
 <p class="source-line" data-source-line="205">平台（網易雲音樂 / QQ 音樂）→ 關鍵字（歌名、歌手、歌曲連結、歌曲 ID 都行）→「搜尋」→<br>
@@ -1059,14 +1057,15 @@ PR 不允許腳本刪除字幕軌，重複生成多出來的按右鍵刪掉。</
 <li class="source-line" data-source-line="262"><strong>裝完必須「完全結束」宿主再重啟</strong>。只關視窗不算 —— CEP 擴充功能和腳本引擎都是行程啟動時載入的。</li>
 <li class="source-line" data-source-line="263"><strong>「以參考圖層重建」會刪掉原圖層</strong>。整個操作在一步復原裡，Ctrl+Z 能撤回；<br>
 但只要之後又做了別的編輯，復原就變複雜了 —— 動手前先存專案。</li>
-<li class="source-line" data-source-line="265"><strong>圖層樣式（陰影 / 描邊 / 外光暈 / 斜角浮雕）同步不了</strong>。AE 腳本介面沒開放。<br>
-要連它一起搬：選中參考層 → 選單「動畫 &gt; 將動畫預設另存為」存成 <code>.ffx</code><br>
-→ 去「歌詞導入」頁 ⑦ 選它套用。<br>
+<li class="source-line" data-source-line="265"><strong>圖層樣式（陰影 / 描邊 / 外光暈 / 斜角浮雕）只有「以參考圖層重建」帶得走</strong>。<br>
+它是 AE 內部的 <code>duplicate()</code>，不受腳本介面限制，所以這一塊不用管。<br>
+如果哪天要用回「逐一屬性同步」那條老路，那部分抄不到圖層樣式，只能走 <code>.ffx</code>：<br>
+選中參考層 → 選單「動畫 &gt; 將動畫預設另存為」存成 <code>.ffx</code> → 去「歌詞導入」頁 ⑦ 選它套用。<br>
 只是描邊的話，「文字屬性 → 描邊」或「效果 → 生成 → 描邊」這兩樣是能同步的。</li>
 <li class="source-line" data-source-line="269"><strong>直排文字有版本要求</strong>。AE 2024（24.2）及以上走原生直排；更早版本自動降級成<br>
 「逐字換行」模擬方案，能用但不如原生精細，標點位置也可能略有差異。</li>
-<li class="source-line" data-source-line="271"><strong>長任務期間面板會「卡住」</strong>。生成 / 同步 / 搜尋都是同步阻塞的，腳本在跑時面板點不動，<br>
-這是宿主通訊機制決定的，不是當機。進度看面板底部狀態列，別反覆點。</li>
+<li class="source-line" data-source-line="271"><strong>長任務期間宿主會「卡住」</strong>。生成 / 同步 / 搜尋都是同步阻塞的，腳本在跑時宿主點不動，<br>
+這是宿主通訊機制決定的，不是當機。進度看面板底部狀態列（同步 / 重建會逐層顯示 <code>3/10</code>），等它回來就好，別反覆點。</li>
 <li class="source-line" data-source-line="273"><strong>線上歌詞只有網易雲和 QQ 音樂兩個平台</strong>，需要連網。歌詞來自公開介面，<br>
 內容準確性和版權歸各平台與詞曲作者，請僅用於個人學習研究。</li>
 <li class="source-line" data-source-line="275"><strong>面板設置不跟著專案走</strong>。介面設置（含語言）存在 CEP 的瀏覽器本機儲存裡，<br>

@@ -969,12 +969,21 @@
         var spec = U.parseIndexSpec(String(a.spec || ""), comp.numLayers);
         if (!spec || spec.error) { return { ok: false, error: SB.M("图层号有误：%1", (spec ? spec.error : SB.M("空"))) }; }
 
+        /* 双语参数要在收集目标之前解析：第二参考层本身不能当成目标重建掉。
+         * 默认值 all + follow 就是加双语支持之前的老行为，面板不传也不会变。 */
+        var bi = a.bi || {};
+        var ref2 = null;
+        if (bi.ref2Index > 0) {
+            try { ref2 = comp.layer(bi.ref2Index); } catch (eR2) { ref2 = null; }
+            if (ref2 === ref) { ref2 = null; }
+        }
+
         /* 先收集 Layer 对象：删层会让编号失效，绝不能边删边按编号取 */
         var targets = [], names = [], i;
         for (i = 0; i < spec.list.length; i++) {
             var Lx = null;
             try { Lx = comp.layer(spec.list[i]); } catch (eL) { }
-            if (!Lx || Lx === ref) { continue; }
+            if (!Lx || Lx === ref || (ref2 && Lx === ref2)) { continue; }
             if (a.onlyText !== false && !(Lx instanceof TextLayer)) { continue; }
             targets.push(Lx);
             if (names.length < 4) { names.push("#" + Lx.index + " " + Lx.name); }
@@ -996,6 +1005,10 @@
         progWrite(0, targets.length, "r");
         var rep = ST.rebuildFromReference(comp, ref, targets, {
             remapMode: mode,
+            biScope: bi.scope || "all",
+            biPos: bi.pos || "follow",
+            biStep: num(bi.step, 0),
+            refLayer2: ref2,
             onProgress: function (done, total) {
                 /* 文件：每层都写，面板能实时看到 1/10、2/10……
                  * 日志：每 5 层记一条就够，免得 BR.state.log 塞满。 */
@@ -1011,6 +1024,28 @@
         lines.push(SB.M("关键帧对时：%1 个（%2）", rep.remapped,
             (mode === "scale" ? SB.M("缩放到每层入点出点") : (mode === "shift" ? SB.M("整体平移") : SB.M("不处理")))));
         if (rep.skipped > 0) { lines.push(SB.M("跳过：%1 个", rep.skipped)); }
+
+        /* 双语的结果要写在明面上：不然「原文译文叠在一起」这种问题，
+         * 用户只看「重建 N 个图层」是看不出来的。 */
+        var biScopeOut = bi.scope || "all";
+        var biPosOut = bi.pos || "follow";
+        if (biScopeOut !== "all" || biPosOut !== "follow" || ref2) {
+            var gg = rep.groups || { same: 0, other: 0 };
+            lines.push(SB.M("双语分组：与参考层同组 %1 层、另一组 %2 层%3", gg.same, gg.other,
+                (biScopeOut === "all" ? "" : SB.M("（本次只处理「%1」，跳过 %2 层）",
+                    (biScopeOut === "same" ? SB.M("与参考层同组") : SB.M("另一组")), rep.scopeSkipped))));
+            if (biPosOut === "stagger" && rep.staggered > 0) {
+                lines.push(SB.M("已按组内行号错开：%1 层（行距 %2）", rep.staggered,
+                    (num(bi.step, 0) > 0 ? (num(bi.step, 0) + "px") : SB.M("自动"))));
+            }
+            if (biPosOut === "keep") { lines.push(SB.M("位置未改动（保留各自原来的 X/Y）")); }
+            if (ref2) { lines.push(SB.M("另一组用的是第二个参考层 #%1「%2」", ref2.index, ref2.name)); }
+        } else if ((rep.groups.same + rep.groups.other) > 0 &&
+                   rep.groups.same > 0 && rep.groups.other > 0) {
+            var stepHint = num(bi.step, 0) > 0 ? (num(bi.step, 0) + "px") : SB.M("自动");
+            lines.push(SB.M("⚠ 认出双语两组（同组 %1 层 / 另一组 %2 层），但「双语位置」还是「照抄参考层」——两组的 Y 会变成同一个值、叠在一起。要分开就把该项改成「保留上下错位」（行距 %3），或给「另一组用」指定第二个参考层。", rep.groups.same, rep.groups.other, stepHint));
+        }
+
         if (rep.errors && rep.errors.length > 0) {
             lines.push(SB.M("—— 有 %1 条报错 ——", rep.errors.length));
             for (var j = 0; j < Math.min(rep.errors.length, 6); j++) { lines.push("· " + rep.errors[j]); }

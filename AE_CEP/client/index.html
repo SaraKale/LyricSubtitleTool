@@ -333,8 +333,15 @@
         </label>
       </div>
       <div class="row">
-        <button id="btnApply" class="primary" data-i18n="应用到目标图层">应用到目标图层</button>
-        <button id="btnRefRebuild" data-i18n="以参考图层重建（类似Ctrl+D）">以参考图层重建（类似Ctrl+D）</button>
+        <!-- 「应用到目标图层」暂时不暴露：
+             它是「逐属性抄」，而图层样式（投影 / 描边 / 外发光 / 斜面）AE 的脚本接口
+             根本没开放，抄不过去 —— 用户拿它做出来的字幕经常「样式没跟上」。
+             下面的「以参考图层重建」是 duplicate()，AE 内部复制，样式 / 效果 / 动画器 /
+             蒙版全都带得走，双语错位也已经补上了，效果明显更好。
+             代码还在（app.js 的 doApplyStyle / 宿主的 API.style），要恢复就把下面这行的
+             style="display:none" 删掉即可。 -->
+        <button id="btnApply" class="primary" style="display:none" data-i18n="应用到目标图层">应用到目标图层</button>
+        <button id="btnRefRebuild" class="primary" data-i18n="以参考图层重建（类似Ctrl+D）">以参考图层重建（类似Ctrl+D）</button>
         <button id="btnRefCopyOnly" data-i18n="只同步文字样式（最轻量）">只同步文字样式（最轻量）</button>
       </div>
       <textarea id="styleResult" class="log" readonly></textarea>
