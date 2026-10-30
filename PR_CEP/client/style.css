@@ -1,0 +1,319 @@
+/* ============================================================================
+ *  歌词字幕排版工具（LyricSubtitleTool）CEP 面板样式
+ *  ---------------------------------------------------------------------------
+ *  配色跟着 AE 走：启动时读宿主面板背景色，亮就挂 body.light，暗就用默认深色。
+ *  滚动条是真滚动条（Chromium 的 ::-webkit-scrollbar），比 ScriptUI 那条路舒服太多。
+ * ==========================================================================*/
+
+:root {
+  --bg: #2b2b2b;
+  --panel: #353535;
+  --panel2: #3d3d3d;
+  --input: #1f1f1f;
+  --border: #4c4c4c;
+  --text: #e2e2e2;
+  --muted: #a6a6a6;
+  --accent: #3a8ee6;
+  --accent-text: #ffffff;
+  --warn-bg: #4a3a1c;
+  --warn-text: #f0c674;
+  --ok: #6cc24a;
+  --err: #e06c5a;
+}
+
+body.light {
+  --bg: #f0f0f0;
+  --panel: #ffffff;
+  --panel2: #f6f6f6;
+  --input: #ffffff;
+  --border: #c8c8c8;
+  --text: #1e1e1e;
+  --muted: #666666;
+  --accent: #1a76d2;
+  --accent-text: #ffffff;
+  --warn-bg: #fff4d6;
+  --warn-text: #7a5a10;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+  font-size: 16px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body { display: flex; flex-direction: column; }
+
+/* ---------------------------------------------------------------- 标签栏 */
+
+.tabbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px 0 6px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+
+.tabbar .grow { flex: 1 1 auto; }
+
+.tabbtn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  color: var(--muted);
+  padding: 5px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 3px 3px 0 0;
+}
+.tabbtn:hover { color: var(--text); background: var(--panel2); font-size: 16px;}
+.tabbtn.active {
+  color: var(--text);
+  background: var(--panel);
+  border-color: var(--border);
+  font-size: 16px;
+}
+
+.build { color: var(--muted); font-size: 11px; padding-right: 4px; }
+
+/* ---------------------------------------------------------------- 页 + 滚动 */
+
+.tabpane {
+  display: none;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+  background: var(--bg);
+}
+.tabpane.active { display: block; }
+
+.tabpane::-webkit-scrollbar,
+.preview::-webkit-scrollbar,
+.log::-webkit-scrollbar,
+.listbox::-webkit-scrollbar { width: 10px; height: 10px; }
+
+.tabpane::-webkit-scrollbar-thumb,
+.preview::-webkit-scrollbar-thumb,
+.log::-webkit-scrollbar-thumb,
+.listbox::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.tabpane::-webkit-scrollbar-thumb:hover { background: var(--muted); background-clip: padding-box; }
+.tabpane::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------------------------------------------------------------- 工具条 */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+/* ---------------------------------------------------------------- 折叠分组 */
+
+.sec {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 6px;
+  background: var(--panel);
+  overflow: hidden;
+}
+
+.sec-head {
+  padding: 6px 8px;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--panel2);
+  border-bottom: 1px solid var(--border);
+}
+.sec-head:hover { background: var(--accent); color: var(--accent-text); }
+.sec.collapsed .sec-head { border-bottom: none; }
+.sec.collapsed .sec-body { display: none; }
+
+.arrow { display: inline-block; width: 14px; }
+.sec.collapsed .arrow { transform: rotate(-90deg); }
+
+.sec-body { padding: 8px; }
+
+/* ---------------------------------------------------------------- 面板块 */
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--panel);
+  padding: 8px;
+  margin-bottom: 8px;
+}
+.panel-title { font-weight: 600; margin-bottom: 6px; }
+
+/* ---------------------------------------------------------------- 行 / 控件 */
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.fld { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; margin: 0 10px 0px 10px;}
+.fld.grow { flex: 1 1 160px; min-width: 120px; }
+.fld.grow > select, .fld.grow > input { flex: 1 1 auto; min-width: 0; }
+
+button {
+  background: var(--panel2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 4px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: inherit;
+}
+button:hover { border-color: var(--accent); }
+button:active { background: var(--accent); color: var(--accent-text); }
+button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+button.primary:hover { filter: brightness(1.1); }
+
+input[type="text"], select, textarea {
+  background: var(--input);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 3px 5px;
+  font-size: 16px;
+  font-family: inherit;
+  -webkit-user-select: text;
+  user-select: text;
+  margin: 0 10px 0px 10px;
+}
+input[type="text"]:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+input.num { width: 52px; text-align: right; }
+
+input[type="color"] {
+  width: 34px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--border);
+  background: var(--input);
+  cursor: pointer;
+}
+
+.chk { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; margin: 0 15px 0px 10px;}
+.chk input { margin: 0; }
+
+textarea.lyric {
+  width: 100%;
+  height: 140px;
+  resize: vertical;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+textarea.log {
+  width: 100%;
+  height: 150px;
+  resize: vertical;
+  line-height: 1.5;
+  font-family: Consolas, "Courier New", monospace;
+  white-space: pre;
+  overflow: auto;
+}
+textarea.log.tall { height: 190px; }
+textarea.log.taller { height: 300px; }
+
+.preview {
+  max-height: 170px;
+  overflow: auto;
+  background: var(--input);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 4px;
+  font-family: Consolas, "Courier New", monospace;
+  line-height: 1.6;
+  white-space: pre;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.preview .pv { padding: 0 2px; }
+.preview .pv:hover { background: var(--panel2); }
+/* 双语拆层：第二行往里缩进一点 + 「原 / 译」角标，同一时间码的两句一眼成对 */
+.preview .pv.sub { padding-left: 22px; color: var(--muted); }
+.preview .pv .tag {
+  display: inline-block; min-width: 18px; text-align: center;
+  margin-right: 6px; padding: 0 4px;
+  border: 1px solid var(--border); border-radius: 2px;
+  font-size: 12px; color: var(--muted);
+}
+
+.listbox { width: 100%; margin-bottom: 6px; }
+.listbox option { padding: 2px 4px; }
+
+.hint { color: var(--muted); font-size: 14px; line-height: 1.5; }
+.hint.block { display: block; margin-top: 4px; white-space: pre-wrap; }
+
+.warn {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+  border-radius: 3px;
+  padding: 5px 7px;
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------- 状态栏 */
+
+.statusbar {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  background: var(--panel2);
+  border-top: 1px solid var(--border);
+  font-size: 16px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.statusbar.err { color: var(--err); }
+.statusbar.ok { color: var(--ok); }
+
+/* ---------------------------------------------------------------- 确认框 */
+
+.mask {
+  display: none;
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  align-items: center;
+  justify-content: center;
+}
+.mask.show { display: flex; }
+
+.dialog {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 14px;
+  max-width: 380px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+}
+.dlg-title { font-weight: 600; margin-bottom: 8px; }
+.dlg-msg { color: var(--text); line-height: 1.6; white-space: pre-wrap; margin-bottom: 12px; }
+.dlg-btns { display: flex; justify-content: flex-end; gap: 8px; }

@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="generator" content="VNote">
+
+    <title>README_JP</title>
+
+    <style type="text/css">
+    div.code-toolbar > div.toolbar {
+    display: none;
+}
+
+    </style>
+
+    <style type="text/css">
+    *,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.container-fluid {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-12 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    .col-md-3 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+
+@media (min-width: 768px) {
+    .col-md-9 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 75%;
+        flex: 0 0 75%;
+        max-width: 75%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-xl-2 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 16.666667%;
+        flex: 0 0 16.666667%;
+        max-width: 16.666667%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-xl-10 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 83.333333%;
+        flex: 0 0 83.333333%;
+        max-width: 83.333333%;
+    }
+}
+
+@media (min-width: 768px) {
+    .pt-md-3, .py-md-3 {
+        padding-top: 1rem!important;
+    }
+}
+
+@media (min-width: 768px) {
+    .pb-md-3, .py-md-3 {
+        padding-bottom: 1rem!important;
+    }
+}
+
+@media (min-width: 768px) {
+    .pl-md-5, .px-md-5 {
+        padding-left: 3rem!important;
+    }
+}
+
+.d-none {
+    display: none!important;
+}
+
+@media (min-width: 1200px) {
+    .d-xl-block {
+        display: block!important;
+    }
+}
+
+@media (min-width: 768px) {
+    .d-md-block {
+        display: block!important;
+    }
+}
+
+.bd-content {
+    -webkit-box-ordinal-group: 1;
+    -ms-flex-order: 0;
+    order: 0;
+}
+
+.bd-toc {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 4rem;
+    height: calc(100vh - 10rem);
+    overflow-y: auto;
+}
+
+.bd-toc {
+    -webkit-box-ordinal-group: 2;
+    -ms-flex-order: 1;
+    order: 1;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    font-size: .875rem;
+}
+
+.section-nav {
+    padding-left: 0;
+}
+
+.section-nav ul {
+    font-size: .875rem;
+    list-style-type: none;
+}
+
+.section-nav li {
+    font-size: .875rem;
+}
+
+.section-nav a {
+    color: inherit !important;
+    white-space: nowrap;
+}
+
+.row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+@media (min-width: 1200px) {
+    .flex-xl-nowrap {
+        flex-wrap: nowrap !important;
+    }
+}
+
+#floating-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: #00897B;
+    position: fixed;
+    top: .5rem;
+    right: .5rem;
+    cursor: pointer;
+    box-shadow: 0px 2px 5px #666;
+}
+
+#floating-button .more {
+    color: #F5F5F5;
+    position: absolute;
+    top: 0;
+    display: block;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    line-height: 2.5rem;
+    font-size: 2rem;
+    font-family: 'monospace';
+    font-weight: 300;
+}
+
+.hide-none {
+    display: none !important;
+}
+
+.col-expand {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    padding-right: 3rem !important;
+}
+
+.outline-bold {
+    font-weight: bolder !important;
+}
+
+@media print {
+    #floating-button {
+        display: none !important;
+    }
+}
+
+
+    #vx-content.vx-section-number, #vx-content.vx-section-number-2 h1, #vx-content.vx-section-number-3 h1, #vx-content.vx-section-number-3 h2 { counter-reset: section1 0 section2 0 section3 0 section4 0 section5 0 section6 0; }
+#vx-content.vx-section-number-1 h1, #vx-content.vx-section-number-2 h2, #vx-content.vx-section-number-3 h3 { counter-reset: section2 0 section3 0 section4 0 seciton5 0 section6 0; }
+#vx-content.vx-section-number-1 h2, #vx-content.vx-section-number-2 h3, #vx-content.vx-section-number-3 h4 { counter-reset: section3 0 section4 0 section5 0 section6 0; }
+#vx-content.vx-section-number-1 h3, #vx-content.vx-section-number-2 h4, #vx-content.vx-section-number-3 h5 { counter-reset: section4 0 section5 0 section6 0; }
+#vx-content.vx-section-number-1 h4, #vx-content.vx-section-number-2 h5 { counter-reset: section5 0 section6 0; }
+#vx-content.vx-section-number-1 h5 { counter-reset: section6 0; }
+#vx-content.vx-section-number-1 h1::before, #vx-content.vx-section-number-2 h2::before, #vx-content.vx-section-number-3 h3::before { counter-increment: section1 1; content: counter(section1) ". "; }
+#vx-content.vx-section-number-1 h2::before, #vx-content.vx-section-number-2 h3::before, #vx-content.vx-section-number-3 h4::before { counter-increment: section2 1; content: counter(section1) "." counter(section2) ". "; }
+#vx-content.vx-section-number-1 h3::before, #vx-content.vx-section-number-2 h4::before, #vx-content.vx-section-number-3 h5::before { counter-increment: section3 1; content: counter(section1) "." counter(section2) "." counter(section3) ". "; }
+#vx-content.vx-section-number-1 h4::before, #vx-content.vx-section-number-2 h5::before, #vx-content.vx-section-number-3 h6::before { counter-increment: section4 1; content: counter(section1) "." counter(section2) "." counter(section3) "." counter(section4) ". "; }
+#vx-content.vx-section-number-1 h5::before, #vx-content.vx-section-number-2 h6::before { counter-increment: section5 1; content: counter(section1) "." counter(section2) "." counter(section3) "." counter(section4) "." counter(section5) ". "; }
+#vx-content.vx-section-number-1 h6::before { counter-increment: section6 1; content: counter(section1) "." counter(section2) "." counter(section3) "." counter(section4) "." counter(section5) "." counter(section6) ". "; }
+#vx-content.vx-constrain-image-width img, #vx-content.vx-constrain-image-width div.vx-plantuml-graph > svg, #vx-content.vx-constrain-image-width div.vx-mermaid-graph, #vx-content.vx-constrain-image-width div.vx-flowchartjs-graph, #vx-content.vx-constrain-image-width div.vx-wavedrom-graph { max-width: 100% !important; height: auto !important; }
+figure { margin: auto; }
+figcaption { font-style: italic; }
+#vx-content.vx-image-align-center figure { text-align: center; }
+#vx-content.vx-image-align-center figcaption { text-align: center; }
+#vx-content.vx-image-align-center div.vx-plantuml-graph, #vx-content.vx-image-align-center div.vx-mermaid-graph, #vx-content.vx-image-align-center div.vx-flowchartjs-graph, #vx-content.vx-image-align-center div.vx-wavedrom-graph { margin-left: auto; margin-right: auto; }
+.vx-table-of-contents ol { list-style: none; }
+#vx-content.vx-section-number-1 .vx-table-of-contents ol { counter-reset: toc 0; }
+#vx-content.vx-section-number-1 .vx-table-of-contents ol li { counter-increment: toc 1; }
+#vx-content.vx-section-number-1 .vx-table-of-contents ol li::before { content: counters(toc, ".") ". "; font-family: cursive; }
+#vx-content.vx-section-number-2 .vx-table-of-contents > ol > li ol { counter-reset: toc 0; }
+#vx-content.vx-section-number-2 .vx-table-of-contents > ol > li ol li { counter-increment: toc 1; }
+#vx-content.vx-section-number-2 .vx-table-of-contents > ol > li ol li::before { content: counters(toc, ".") ". "; font-family: cursive; }
+#vx-content.vx-section-number-3 .vx-table-of-contents > ol > li > ol > li ol { counter-reset: toc 0; }
+#vx-content.vx-section-number-3 .vx-table-of-contents > ol > li > ol > li ol li { counter-increment: toc 1; }
+#vx-content.vx-section-number-3 .vx-table-of-contents > ol > li > ol > li ol li::before { content: counters(toc, ".") ". "; font-family: cursive; }
+.vx-header-anchor { visibility: hidden; vertical-align: middle; }
+.vx-header-anchor::after { content: attr(vx-data-anchor-icon); }
+#vx-content h1:hover .vx-header-anchor, #vx-content h2:hover .vx-header-anchor, #vx-content h3:hover .vx-header-anchor, #vx-content h4:hover .vx-header-anchor, #vx-content h5:hover .vx-header-anchor, #vx-content h6:hover .vx-header-anchor { visibility: visible; vertical-align: middle; }
+#vx-content.vx-indent-first-line p { text-indent: 2em; }
+body.vx-transparent-background { background-color: transparent !important; }
+#vx-content.vx-nonscrollable pre { white-space: pre-wrap !important; word-break: break-all !important; overflow: hidden !important; }
+#vx-content.vx-nonscrollable pre code { white-space: pre-wrap !important; word-break: break-all !important; }
+#vx-content.vx-nonscrollable code, #vx-content.vx-nonscrollable a { word-break: break-all !important; }
+body { margin: 0px auto; font-family: "YaHei Consolas Hybrid", "Noto Sans", "Helvetica Neue", "Segoe UI", Helvetica, Tahoma, Arial, Geneva, Georgia, Palatino, "Times New Roman", 冬青黑体, "Microsoft YaHei", 微软雅黑, "Microsoft YaHei UI", "WenQuanYi Micro Hei", 文泉驿雅黑, Dengxian, 等线体, STXihei, 华文细黑, "Liberation Sans", "Droid Sans", NSimSun, 新宋体, SimSun, 宋体, "Apple Color Emoji", "Segoe UI Emoji"; color: rgb(52, 73, 94); line-height: 1.5; padding: 0px; background-color: rgb(255, 255, 255); font-size: 16px; }
+h1, h2, h3, h4, h5, h6 { color: rgb(52, 73, 94); font-weight: bold; margin-top: 20px; margin-bottom: 10px; padding: 0px; }
+p, blockquote, table { margin: 1.2em 0px; }
+ul, ol, dl { margin: 0.4em 0px; }
+p { padding: 0px; }
+h1 { padding-bottom: 0.4rem; font-size: 2.2rem; line-height: 1.3; }
+h2 { font-size: 1.75rem; line-height: 1.225; margin: 35px 0px 15px; padding-bottom: 0.5em; border-bottom: 1px solid rgb(221, 221, 221); }
+h3 { font-size: 1.4rem; line-height: 1.43; margin: 20px 0px 7px; }
+h4 { font-size: 1.2rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 1rem; color: rgb(119, 119, 119); }
+a { color: rgb(0, 153, 255); margin: 0px; padding: 0px; vertical-align: baseline; text-decoration: none; word-break: break-word; }
+a:hover { text-decoration: underline; }
+a:visited { color: rgb(128, 0, 128); }
+ul, ol { padding: 0px 0px 0px 24px; }
+li { line-height: 24px; }
+li ul, li ol { margin-left: 16px; }
+p, ul, ol { font-size: 16px; line-height: 24px; }
+pre { display: block; overflow: auto hidden; tab-size: 4; }
+code { font-family: "YaHei Consolas Hybrid", Consolas, Monaco, "Andale Mono", monospace, "Courier New"; color: rgb(233, 105, 0); padding: 0px 4px; margin: 4px 0px; border-radius: 2px; background-color: rgb(248, 248, 248); word-break: break-word; }
+:is(h1, h2, h3, h4, h5, h6) code { font-size: inherit; }
+pre code { display: block; padding-left: 0.5em; padding-right: 0.5em; color: rgb(52, 73, 94); background-color: rgb(224, 224, 224); line-height: 1.5; font-family: "YaHei Consolas Hybrid", Consolas, Monaco, "Andale Mono", monospace, "Courier New"; white-space: pre; tab-size: 4; }
+aside { display: block; float: right; width: 390px; }
+blockquote { color: rgb(102, 102, 102); border-left: 0.5em solid rgb(122, 122, 122); padding: 0px 1em; margin-left: 0px; }
+blockquote p { color: rgb(102, 102, 102); }
+hr { display: block; text-align: left; margin: 1em 0px; border: none; height: 1px; background-color: rgb(204, 204, 204); }
+table { padding: 0px; width: 100%; margin: 1rem 0px; border-collapse: collapse; }
+table tr { border-top: 1px solid rgb(204, 204, 204); background-color: white; margin: 0px; padding: 0px; }
+table tr:nth-child(2n) { background-color: rgb(248, 248, 248); }
+table tr th { font-weight: bold; border: 1px solid rgb(204, 204, 204); background-color: rgb(242, 242, 242); text-align: left; margin: 0px; padding: 6px 13px; }
+table tr td { border: 1px solid rgb(204, 204, 204); margin: 0px; padding: 6px 13px; }
+table tr th :first-child, table tr td :first-child { margin-top: 0px; }
+table tr th :last-child, table tr td :last-child { margin-bottom: 0px; }
+div.vx-mermaid-graph { margin: 16px 0px; overflow-y: hidden; }
+div.vx-flowchartjs-graph { padding: 0px 5px; margin: 16px 0px; width: fit-content; overflow: hidden; }
+div.vx-wavedrom-graph { padding: 0px 5px; margin: 16px 0px; width: fit-content; overflow: hidden; }
+div.vx-plantuml-graph { padding: 5px 5px 0px; margin: 16px 0px; width: fit-content; overflow: hidden; }
+::selection { background-color: rgb(25, 118, 210); color: rgb(255, 255, 255); }
+::-webkit-scrollbar { background-color: rgb(245, 245, 245); width: 14px; height: 14px; border: none; }
+::-webkit-scrollbar-corner { background-color: rgb(245, 245, 245); }
+::-webkit-scrollbar-button { height: 14px; width: 14px; background-color: rgb(245, 245, 245); }
+::-webkit-scrollbar-button:hover { background-color: rgb(218, 218, 218); }
+::-webkit-scrollbar-button:active { background-color: rgb(192, 192, 192); }
+::-webkit-scrollbar-track { background-color: rgb(245, 245, 245); }
+::-webkit-scrollbar-thumb { border: none; background-color: rgb(205, 205, 205); }
+::-webkit-scrollbar-thumb:hover { background-color: rgb(192, 192, 192); }
+::-webkit-scrollbar-thumb:active { background-color: rgb(187, 187, 187); }
+::-webkit-scrollbar-button:horizontal:increment { background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 12L31 24L19 36" stroke="%23222222" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>'); background-repeat: no-repeat; background-size: contain; }
+::-webkit-scrollbar-button:horizontal:decrement { background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M31 36L19 24L31 12" stroke="%23222222" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>'); background-repeat: no-repeat; background-size: contain; }
+::-webkit-scrollbar-button:vertical:increment { background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M36 18L24 30L12 18" stroke="%23222222" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>'); background-repeat: no-repeat; background-size: contain; }
+::-webkit-scrollbar-button:vertical:decrement { background-image: url('data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 30L25 18L37 30" stroke="%23222222" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>'); background-repeat: no-repeat; background-size: contain; }
+#vx-content span.vx-search-match { color: rgb(34, 34, 34); background-color: rgb(77, 182, 172); }
+#vx-content span.vx-current-search-match { color: rgb(34, 34, 34); background-color: rgb(102, 187, 106); }
+#vx-content { margin: 0px auto; padding: 30px 30px 40px; }
+@media screen and (min-width: 1180px) {
+  #vx-content { max-width: 1100px; }
+}
+@media screen and (max-width: 768px) {
+  #vx-content { max-width: 100%; padding: 30px 15px 40px; }
+}
+.vx-alert { margin: 2em 0px; background-color: rgb(248, 248, 248) !important; padding: 12px 24px 12px 30px !important; border-radius: 0px !important; border-top: none !important; border-right: none !important; border-bottom: none !important; border-image: initial !important; border-left: 4px solid rgb(73, 139, 167) !important; color: inherit !important; }
+.vx-alert::before { background-color: rgb(73, 139, 167); border-radius: 100%; color: rgb(255, 255, 255); content: "!"; font-family: Dosis, "Source Sans Pro", "Helvetica Neue", Arial, sans-serif; font-size: 14px; font-weight: bold; left: -12px; line-height: 20px; position: absolute; height: 20px; width: 20px; text-align: center; top: 14px; }
+.vx-alert p { margin: 0.4em 0px; }
+.alert-success, .alert-s { border-color: rgb(66, 185, 131) !important; }
+.alert-success::before, .alert-s::before { background-color: rgb(66, 185, 131); }
+.alert-warning, .alert-w { border-color: rgb(255, 165, 2) !important; }
+.alert-warning::before, .alert-w::before { background-color: rgb(255, 165, 2); }
+.alert-info, .alert-i { border-color: rgb(112, 161, 255) !important; }
+.alert-info::before, .alert-i::before { background-color: rgb(112, 161, 255); }
+.alert-danger, .alert-d { border-color: rgb(255, 71, 87) !important; }
+.alert-danger::before, .alert-d::before { background-color: rgb(255, 71, 87); }
+.alert-light { border-color: rgb(193, 193, 193) !important; }
+.alert-light::before { background-color: rgb(193, 193, 193); }
+.alert-dark { border-color: rgb(72, 72, 72) !important; }
+.alert-dark::before { background-color: rgb(72, 72, 72); }
+.vx-header-anchor::after { background-color: rgb(238, 238, 238); padding: 0px 5px; border-radius: 3px; }
+.vx-header-anchor { color: rgb(153, 153, 153); display: inline-block; margin-left: 10px; }
+h1 .vx-header-anchor::after { content: "H1"; }
+h2 .vx-header-anchor::after { content: "H2"; }
+h3 .vx-header-anchor::after { content: "H3"; }
+h4 .vx-header-anchor::after { content: "H4"; }
+h5 .vx-header-anchor::after { content: "H5"; }
+h6 .vx-header-anchor::after { content: "H6"; }
+h1 .vx-header-anchor { margin-top: -5px; }
+h2 .vx-header-anchor { margin-top: -4px; }
+h3 .vx-header-anchor { margin-top: -3px; }
+h4 .vx-header-anchor { margin-top: -2px; }
+h5 .vx-header-anchor { margin-top: -1px; }
+.vx-alert .code-toolbar pre[class*="language-"] { border: 1px dashed rgb(238, 238, 238); background-color: rgb(243, 243, 243) !important; }
+code[class*="language-"], pre[class*="language-"] { color: rgb(82, 82, 82); background: none; text-shadow: white 0px 1px; font-size: 0.9rem; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; overflow-wrap: normal; line-height: 1.5; tab-size: 4; hyphens: none; }
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection, code[class*="language-"]::selection, code[class*="language-"] ::selection { text-shadow: none; background-color: rgb(25, 118, 210); color: white; }
+@media print {
+  code[class*="language-"], pre[class*="language-"] { text-shadow: none; }
+}
+pre[class*="language-"] { padding: 1em; margin: 0px; overflow: auto; border-radius: 4px; }
+:not(pre) > code[class*="language-"], pre[class*="language-"] { background: rgb(248, 248, 248) !important; }
+:not(pre) > code[class*="language-"] { padding: 0.1em; border-radius: 0.3em; white-space: normal; }
+.token.comment, .token.prolog, .token.doctype, .token.cdata { color: rgb(170, 85, 0); }
+.token.punctuation { color: rgb(153, 153, 153); }
+.token.namespace { opacity: 0.7; }
+.token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol, .token.deleted { color: rgb(153, 0, 85); }
+.token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted { color: rgb(102, 153, 0); }
+.token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string { color: rgb(154, 110, 58); }
+.token.atrule, .token.attr-value, .token.keyword { color: rgb(119, 0, 136); }
+.token.function, .token.class-name { color: rgb(221, 74, 104); }
+.token.regex, .token.important, .token.variable { color: rgb(238, 153, 0); }
+.token.important, .token.bold { font-weight: bold; }
+.token.italic { font-style: italic; }
+.token.entity { cursor: help; }
+pre[class*="language-"].line-numbers { position: relative; padding-left: 3.8em; counter-reset: linenumber 0; }
+pre[class*="language-"].line-numbers > code { position: relative; white-space: inherit; letter-spacing: 1px; }
+.line-numbers .line-numbers-rows { position: absolute; pointer-events: none; top: 0px; font-size: 100%; left: -3.8em; width: 3em; letter-spacing: -1px; border-right: 1px solid rgb(221, 221, 221); color: rgb(153, 153, 153); user-select: none; }
+.line-numbers-rows > span { display: block; counter-increment: linenumber 1; }
+.line-numbers-rows > span::before { content: counter(linenumber); color: rgb(153, 153, 153); display: block; padding-right: 0.8em; text-align: right; }
+div.code-toolbar { position: relative; }
+div.code-toolbar > .toolbar { position: absolute; top: 0px; right: 0px; transition: opacity 0.3s ease-in-out 0s; opacity: 0; }
+div.code-toolbar:hover > .toolbar { opacity: 1; }
+div.code-toolbar:focus-within > .toolbar { opacity: 1; }
+div.code-toolbar > .toolbar .toolbar-item { display: inline-block; }
+div.code-toolbar > .toolbar a { cursor: pointer; }
+div.code-toolbar > .toolbar button { background: none; border: 0px; color: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; font-family: inherit; font-optical-sizing: inherit; font-kerning: inherit; font-feature-settings: inherit; font-variation-settings: inherit; line-height: normal; overflow: visible; padding: 0px; user-select: none; }
+div.code-toolbar > .toolbar a, div.code-toolbar > .toolbar button, div.code-toolbar > .toolbar span { color: rgb(255, 255, 255); font-size: 0.8em; font-weight: bold; padding: 0.2em 0.5em; border-radius: 0px 4px; background-color: rgb(92, 157, 255); }
+.vx-image-view-image { transition: all 0.3s ease 0s; }
+.vx-modal-box { display: none; position: fixed; z-index: 1000; padding-top: 50px; left: 0px; top: 0px; width: 100%; height: 100%; overflow: hidden; background-color: rgba(51, 56, 66, 0.85); }
+.vx-modal-content { margin: auto; display: block; width: auto; height: auto; cursor: move; }
+.vx-modal-content { animation-name: zoom; animation-duration: 0.6s; }
+@-webkit-keyframes zoom { 
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+@keyframes zoom { 
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+span.vx-modal-close { position: absolute; z-index: 1000; top: 15px; right: 35px; color: rgb(171, 178, 191); font-size: 40px; font-weight: bold; transition: all 0.3s ease 0s; }
+span.vx-modal-close:hover, span.vx-modal-close:focus { color: rgb(215, 218, 224); text-decoration: none; cursor: pointer; }
+ul.contains-task-list { list-style-type: none; }
+.vx-alert { position: relative; padding: 0.75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: 0.25rem; }
+.alert-primary { color: rgb(0, 64, 133); background-color: rgb(204, 229, 255); border-color: rgb(184, 218, 255); }
+.alert-secondary { color: rgb(56, 61, 65); background-color: rgb(226, 227, 229); border-color: rgb(214, 216, 219); }
+.alert-success { color: rgb(21, 87, 36); background-color: rgb(212, 237, 218); border-color: rgb(195, 230, 203); }
+.alert-info { color: rgb(12, 84, 96); background-color: rgb(209, 236, 241); border-color: rgb(190, 229, 235); }
+.alert-warning { color: rgb(133, 100, 4); background-color: rgb(255, 243, 205); border-color: rgb(255, 238, 186); }
+.alert-danger { color: rgb(114, 28, 36); background-color: rgb(248, 215, 218); border-color: rgb(245, 198, 203); }
+.alert-light { color: rgb(129, 129, 130); background-color: rgb(254, 254, 254); border-color: rgb(253, 253, 254); }
+.alert-dark { color: rgb(27, 30, 33); background-color: rgb(214, 216, 217); border-color: rgb(198, 200, 202); }
+
+    </style>
+
+    <script type="text/javascript">
+        var vxOutlineToc = [];
+
+var setVisible = function(node, visible) {
+    var cl = 'hide-none';
+    if (visible) {
+        node.classList.remove(cl);
+    } else {
+        node.classList.add(cl);
+    }
+};
+
+var isVisible = function(node) {
+    var cl = 'hide-none';
+    return !node.classList.contains(cl);
+};
+
+var setPostContentExpanded = function(node, expanded) {
+    var cl = 'col-expand';
+    if (expanded) {
+        node.classList.add(cl);
+    } else {
+        node.classList.remove(cl);
+    }
+};
+
+var setOutlinePanelVisible = function(visible) {
+    var outlinePanel = document.getElementById('outline-panel');
+    var postContent = document.getElementById('post-content');
+
+    setVisible(outlinePanel, visible);
+    setPostContentExpanded(postContent, !visible);
+};
+
+var isOutlinePanelVisible = function() {
+    var outlinePanel = document.getElementById('outline-panel');
+    return isVisible(outlinePanel);
+};
+
+window.addEventListener('load', function() {
+    var outlinePanel = document.getElementById('outline-panel');
+    outlinePanel.style.display = 'initial';
+
+    var floatingContainer = document.getElementById('container-floating');
+    floatingContainer.style.display = 'initial';
+
+    var outlineContent = document.getElementById('outline-content');
+    var postContent = document.getElementById('post-content');
+
+    // Escape @text to Html.
+    var escapeHtml = function(text) {
+        var map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+
+        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    // Fetch the outline.
+    var headers = postContent.querySelectorAll("h1, h2, h3, h4, h5, h6");
+    vxOutlineToc = [];
+    for (var i = 0; i < headers.length; ++i) {
+        var header = headers[i];
+
+        vxOutlineToc.push({
+            level: parseInt(header.tagName.substr(1)),
+            anchor: header.id,
+            title: escapeHtml(header.textContent)
+        });
+    }
+
+    if (vxOutlineToc.length == 0) {
+        setOutlinePanelVisible(false);
+        setVisible(floatingContainer, false);
+        return;
+    }
+
+    var baseLevel = baseLevelOfToc(vxOutlineToc);
+    var tocTree = tocToTree(toPerfectToc(vxOutlineToc, baseLevel), baseLevel);
+
+    outlineContent.innerHTML = tocTree;
+    setOutlinePanelVisible(true);
+    setVisible(floatingContainer, true);
+});
+
+// Return the topest level of @vxOutlineToc, starting from 1.
+var baseLevelOfToc = function(p_toc) {
+    var level = -1;
+    for (i in p_toc) {
+        if (level == -1) {
+            level = p_toc[i].level;
+        } else if (level > p_toc[i].level) {
+            level = p_toc[i].level;
+        }
+    }
+
+    if (level == -1) {
+        level = 1;
+    }
+
+    return level;
+};
+
+// Handle wrong title levels, such as '#' followed by '###'
+var toPerfectToc = function(p_toc, p_baseLevel) {
+    var i;
+    var curLevel = p_baseLevel - 1;
+    var perfToc = [];
+    for (i in p_toc) {
+        var item = p_toc[i];
+
+        // Insert empty header.
+        while (item.level > curLevel + 1) {
+            curLevel += 1;
+            var tmp = { level: curLevel,
+                        anchor: '',
+                        title: '[EMPTY]'
+                      };
+            perfToc.push(tmp);
+        }
+
+        perfToc.push(item);
+        curLevel = item.level;
+    }
+
+    return perfToc;
+};
+
+var itemToHtml = function(item) {
+    return '<a href="#' + item.anchor + '" title="' + item.title + '" data="' + item.anchor + '">' + item.title + '</a>';
+};
+
+// Turn a perfect toc to a tree using <ul>
+var tocToTree = function(p_toc, p_baseLevel) {
+    var i;
+    var front = '<li>';
+    var ending = ['</li>'];
+    var curLevel = p_baseLevel;
+    for (i in p_toc) {
+        var item = p_toc[i];
+        if (item.level == curLevel) {
+            front += '</li>';
+            front += '<li>';
+            front += itemToHtml(item);
+        } else if (item.level > curLevel) {
+            // assert(item.level - curLevel == 1)
+            front += '<ul>';
+            ending.push('</ul>');
+            front += '<li>';
+            front += itemToHtml(item);
+            ending.push('</li>');
+            curLevel = item.level;
+        } else {
+            while (item.level < curLevel) {
+                var ele = ending.pop();
+                front += ele;
+                if (ele == '</ul>') {
+                    curLevel--;
+                }
+            }
+            front += '</li>';
+            front += '<li>';
+            front += itemToHtml(item);
+        }
+    }
+    while (ending.length > 0) {
+        front += ending.pop();
+    }
+    front = front.replace("<li></li>", "");
+    front = '<ul>' + front + '</ul>';
+    return front;
+};
+
+var toggleMore = function() {
+    if (vxOutlineToc.length == 0) {
+        return;
+    }
+
+    var p = document.getElementById('floating-more');
+    if (isOutlinePanelVisible()) {
+        p.textContent = '<';
+        setOutlinePanelVisible(false);
+    } else {
+        p.textContent = '>';
+        setOutlinePanelVisible(true);
+    }
+};
+
+window.addEventListener('scroll', function() {
+    if (vxOutlineToc.length == 0 || !isOutlinePanelVisible()) {
+        return;
+    }
+
+    var postContent = document.getElementById('post-content');
+    var scrollTop = document.documentElement.scrollTop
+                    || document.body.scrollTop
+                    || window.pageYOffset;
+    var eles = postContent.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+    if (eles.length == 0) {
+        return;
+    }
+
+    var idx = -1;
+    var biaScrollTop = scrollTop + 50;
+    for (var i = 0; i < eles.length; ++i) {
+        if (biaScrollTop >= eles[i].offsetTop) {
+            idx = i;
+        } else {
+            break;
+        }
+    }
+
+    var header = '';
+    if (idx != -1) {
+        header = eles[idx].id;
+    }
+
+    highlightItemOnlyInOutline(header);
+});
+
+var highlightItemOnlyInOutline = function(id) {
+    var cl = 'outline-bold';
+    var outlineContent = document.getElementById('outline-content');
+    var eles = outlineContent.querySelectorAll("a");
+    var target = null;
+    for (var i = 0; i < eles.length; ++i) {
+        var ele = eles[i];
+        if (ele.getAttribute('data') == id) {
+            target = ele;
+            ele.classList.add(cl);
+        } else {
+            ele.classList.remove(cl);
+        }
+    }
+
+    // TODO: scroll target into view within the outline panel scroll area.
+};
+
+    </script>
+
+    <!-- VX_SCRIPTS_PLACEHOLDER -->
+
+    <!-- VX_HEAD_PLACEHOLDER -->
+</head>
+<body class="<!-- VX_BODY_CLASS_LIST_PLACEHOLDER -->">
+    <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <!-- VX_OUTLINE_PANEL_START -->
+        <div id="outline-panel" style="display:none;" class="d-none d-md-block d-xl-block col-md-3 col-xl-2 bd-toc">
+            <div id="outline-content" class="section-nav"></div>
+        </div>
+        <!-- VX_OUTLINE_PANEL_END -->
+
+        <div id="post-content" class="col-12 col-md-9 col-xl-10 py-md-3 pl-md-5 bd-content">
+        <div id="vx-content" class="vx-constrain-image-width line-numbers"><h1 id="歌詞字幕レイアウトツール-·-lyricsubtitletool" class="source-line" data-source-line="0">歌詞字幕レイアウトツール · LyricSubtitleTool<a class="vx-header-anchor" href="#歌詞字幕レイアウトツール-·-lyricsubtitletool" vx-data-anchor-icon="¶"></a></h1>
+<p class="source-line" data-source-line="2"><a href="README.html">English</a> ｜ <a href="README_SC.html">简体中文</a> ｜ <a href="README_TC.html">繁體中文</a> ｜ <a href="README_JP.html">日本語</a></p>
+<p class="source-line" data-source-line="4">LRC / SRT / ASS / VTT / プレーンテキストの歌詞を、<strong>After Effects の文字レイヤーとして一括生成</strong>、<br>
+または <strong>Premiere Pro のキャプショントラック</strong>として一度に並べます。</p>
+<p align="center">
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-dfd.svg" class="vx-image-view-image"></a>
+    <a href=""><img src="https://img.shields.io/badge/After%20Effects-CC%202018%2B-9999ff" class="vx-image-view-image"></a>
+    <a href=""><img src="https://img.shields.io/badge/Premiere%20Pro-2019%2B-9999ff" class="vx-image-view-image"></a>
+    <a href=""><img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey" class="vx-image-view-image"></a>
+</p>
+<h2 id="" class="source-line" data-source-line="14"><img src="image/AE_JP.jpg" alt="" class="vx-image-view-image"><a class="vx-header-anchor" href="#" vx-data-anchor-icon="¶"></a></h2>
+<h2 id="できること" class="source-line" data-source-line="17">できること<a class="vx-header-anchor" href="#できること" vx-data-anchor-icon="¶"></a></h2>
+<p class="source-line" data-source-line="19"><strong>After Effects</strong></p>
+<table class="source-line" data-source-line="21">
+<thead>
+<tr>
+<th>機能</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字幕の一括配置</td>
+<td><code>.lrc</code> / <code>.srt</code> / <code>.ass</code> / <code>.vtt</code> を読み込み、タイムコードどおりにコンポジション内へ字幕レイヤーを生成。イン点・アウト点も合わせ済み</td>
+</tr>
+<tr>
+<td>2言語字幕</td>
+<td>原文と訳文を同じレイヤーに上下2行で入れることも、それぞれ別レイヤーに分けることも可能（分離時は行間を自動計算し、グループ全体を中央揃え）</td>
+</tr>
+<tr>
+<td>スタイルの一括同期</td>
+<td>手作業で1本作った字幕レイヤーのフォント / 境界線 / 位置 / アニメーション / キーフレーム / エクスプレッション / エフェクト / マスクを、数十〜数百レイヤーへ一括適用。<code>1-10</code> や <code>1,5,10</code> のようなレイヤー番号指定に対応</td>
+</tr>
+<tr>
+<td>参照レイヤーから再構築</td>
+<td>手作業の Ctrl+D + 文字の打ち直しに相当。参照レイヤー自体を複製し、各レイヤー元の文字とイン/アウト点を書き戻します</td>
+</tr>
+<tr>
+<td>テンプレートレイヤー</td>
+<td>生成時に「これで良い」と思ったレイヤーをそのまま複製するので、スタイルが1文字もずれません</td>
+</tr>
+<tr>
+<td>アニメーションプリセット</td>
+<td>内蔵の文字アニメーション数種に加え、AE 自身の <code>.ffx</code> も読み込めます</td>
+</tr>
+<tr>
+<td>オンライン歌詞検索</td>
+<td>NetEase Cloud Music / QQ Music（訳文つき）。見つかればそのままパネルへ取り込めます</td>
+</tr>
+<tr>
+<td>縦組み / 自動中央揃え</td>
+<td>AE 2024+ ではネイティブ縦組み、それ以前は自動フォールバック。テキストブロックの中心が指定した X/Y に厳密に一致します</td>
+</tr>
+</tbody>
+</table>
+<p class="source-line" data-source-line="32"><strong>Premiere Pro</strong></p>
+<table class="source-line" data-source-line="34">
+<thead>
+<tr>
+<th>機能</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字幕トラック生成（推奨）</td>
+<td>歌詞 → <code>.srt</code> → 読み込み → PR ネイティブの字幕トラックを生成。速く、安定し、テンプレートも不要。生成後も「キャプション」パネルで1本ずつ編集できます</td>
+</tr>
+<tr>
+<td>グラフィッククリップ</td>
+<td>停止中（理由は <a href="#faq">FAQ</a> 参照）</td>
+</tr>
+</tbody>
+</table>
+<p class="source-line" data-source-line="39"><strong>対応フォーマット</strong>：LRC（<code>[offset:]</code> や1行複数タイムコードを含む）、SRT、ASS / SSA（スタイル表ごと読み込み）、<br>
+WebVTT、プレーンテキスト（1行1字幕を固定尺で配置）。GBK / UTF-8 は自動判定、判定できない場合は手動で選択できます。</p>
+<hr>
+<h2 id="インストール" class="source-line" data-source-line="44">インストール<a class="vx-header-anchor" href="#インストール" vx-data-anchor-icon="¶"></a></h2>
+<blockquote>
+<p class="source-line" data-source-line="46">対応：<strong>After Effects CC 2018 〜 2025+</strong>、<strong>Premiere Pro 2019+</strong>（字幕トラックは 2021+）。<br>
+OS：<strong>Windows / macOS</strong>。Linux は非対応 —— Adobe は PR / AE の Linux 版を提供していません。</p>
+</blockquote>
+<p class="source-line" data-source-line="49">このプラグインは自己署名の拡張機能です。Adobe は既定で公式署名済みの拡張機能しか読み込まないため、<br>
+<strong>CEP のデバッグモードを手動で有効にする必要があります</strong>。有効にしないとパネルはメニューに現れず、<br>
+エラーも一切表示されません。以下の4ステップはすべて必須です。</p>
+<h3 id="ステップ-1-拡張機能フォルダーをコピー" class="source-line" data-source-line="53">ステップ 1 拡張機能フォルダーをコピー<a class="vx-header-anchor" href="#ステップ-1-拡張機能フォルダーをコピー" vx-data-anchor-icon="¶"></a></h3>
+<p class="source-line" data-source-line="55"><code>LyricSubtitleTool_AE</code>（PR 版は <code>LyricSubtitleTool_PR</code>）の<strong>フォルダーごと</strong> CEP の拡張機能フォルダーへコピーします：</p>
+<table class="source-line" data-source-line="57">
+<thead>
+<tr>
+<th></th>
+<th>拡張機能フォルダー</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows</td>
+<td><code>C:\Users\&lt;ユーザー名&gt;\AppData\Roaming\Adobe\CEP\extensions\</code></td>
+</tr>
+<tr>
+<td>macOS</td>
+<td><code>~/Library/Application Support/Adobe/CEP/extensions/</code>（Finder で <code>Cmd+Shift+G</code> を押してパスを貼り付け）</td>
+</tr>
+</tbody>
+</table>
+<p class="source-line" data-source-line="62">コピー後はこうなっているはずです：</p>
+<div class="code-toolbar"><pre class="language-txt line-numbers"><code class="source-line language-txt" data-source-line="64">.../Adobe/CEP/extensions/LyricSubtitleTool_AE/CSXS/manifest.xml
+.../Adobe/CEP/extensions/LyricSubtitleTool_AE/client/index.html
+.../Adobe/CEP/extensions/LyricSubtitleTool_AE/host/index.jsx
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div>
+<p class="source-line" data-source-line="70">⚠ <code>LyricSubtitleTool_AE</code> というフォルダー自体が <code>extensions</code> の直下にある必要があります。<br>
+中のファイルを <code>extensions</code> へ直接ばらまかないでください。</p>
+<h3 id="ステップ-2-デバッグモードを登録" class="source-line" data-source-line="73">ステップ 2 デバッグモードを登録<a class="vx-header-anchor" href="#ステップ-2-デバッグモードを登録" vx-data-anchor-icon="¶"></a></h3>
+<p class="source-line" data-source-line="75"><strong>Windows</strong>（どちらか一方）</p>
+<ul>
+<li class="source-line" data-source-line="77">同梱の <code>Add Keys.reg</code> をダブルクリックし、確認ダイアログで「はい」を選択</li>
+<li class="source-line" data-source-line="78">または手動：<code>regedit</code> → <code>HKEY_CURRENT_USER\Software\Adobe\CSXS.11</code> →<br>
+文字列値 <code>PlayerDebugMode</code> を新規作成し、値に <code>1</code> を設定</li>
+</ul>
+<p class="source-line" data-source-line="81"><strong>macOS</strong>（レジストリはなく、plist に書き込みます）</p>
+<p class="source-line" data-source-line="83">「ターミナル」を開いて貼り付け実行。PC の再起動は不要です：</p>
+<div class="code-toolbar"><pre class="language-bash line-numbers"><code class="source-line language-bash" data-source-line="85"><span class="token keyword">for</span> <span class="token for-or-select variable">v</span> <span class="token keyword">in</span> <span class="token number">9</span> <span class="token number">10</span> <span class="token number">11</span> <span class="token number">12</span> <span class="token number">13</span> <span class="token number">14</span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+  defaults <span class="token function">write</span> com.adobe.CSXS.<span class="token variable">$v</span> PlayerDebugMode <span class="token number">1</span>
+<span class="token keyword">done</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div>
+<blockquote>
+<p class="source-line" data-source-line="91">古いバージョンのホストは <code>CSXS.11</code> を認識しないことがあるため、どちらの方法も 9〜14 をまとめて書き込みます。<br>
+どれが必要か悩む必要はありません。</p>
+</blockquote>
+<h3 id="ステップ-3-ホストを再起動" class="source-line" data-source-line="94">ステップ 3 ホストを再起動<a class="vx-header-anchor" href="#ステップ-3-ホストを再起動" vx-data-anchor-icon="¶"></a></h3>
+<p class="source-line" data-source-line="96">After Effects / Premiere Pro を<strong>完全に終了</strong>してから起動し直します。<br>
+CEP はプロセス起動時に一度だけ拡張機能フォルダーを走査するので、再起動しないとパネルは現れません。</p>
+<h3 id="ステップ-4-パネルを開く" class="source-line" data-source-line="99">ステップ 4 パネルを開く<a class="vx-header-anchor" href="#ステップ-4-パネルを開く" vx-data-anchor-icon="¶"></a></h3>
+<ul>
+<li class="source-line" data-source-line="101">AE：メニュー <code>ウィンドウ &gt; エクステンション &gt; LyricSubtitleTool</code></li>
+<li class="source-line" data-source-line="102">PR：メニュー <code>ウィンドウ &gt; エクステンション &gt; LyricSubtitleTool PR</code></li>
+</ul>
+<blockquote>
+<p class="source-line" data-source-line="104">このメニュー項目は常に英語で、<strong>パネルの言語には追従しません</strong> —— manifest 由来で、<br>
+ホストがプロセス起動時に読むため、その時点ではパネルもスクリプトもまだ動いていません。<br>
+パネル<strong>内部</strong>の見出しは言語設定に追従します。</p>
+</blockquote>
+<h3 id="インストールしてもパネルが出ない？" class="source-line" data-source-line="108">インストールしてもパネルが出ない？<a class="vx-header-anchor" href="#インストールしてもパネルが出ない？" vx-data-anchor-icon="¶"></a></h3>
+<p class="source-line" data-source-line="110">この順に確認してください：</p>
+<ol>
+<li class="source-line" data-source-line="112">ホストを<strong>完全に終了</strong>してから起動し直したか</li>
+<li class="source-line" data-source-line="113">デバッグモードが本当に書き込まれたか（Windows は <code>regedit</code> で値を確認、macOS は<br>
+<code>defaults read com.adobe.CSXS.11 PlayerDebugMode</code>）</li>
+<li class="source-line" data-source-line="115">フォルダー構造が正しいか —— <code>extensions\LyricSubtitleTool_AE\CSXS\manifest.xml</code> である必要があります</li>
+<li class="source-line" data-source-line="116">それでもだめならログを確認：<br>
+<code>%TEMP%\CEP11-AEFT.log</code> / <code>%TEMP%\CEP11-PPRO.log</code>（macOS は <code>~/Library/Logs/CSXS/</code>）。<br>
+中に <code>DevTools listening on ws://…</code> があればパネル自体は読み込めており、問題はパネル内部にあります</li>
+</ol>
+<h3 id="ae-のもうひとつの形：scriptui-単一スクリプト版" class="source-line" data-source-line="120">AE のもうひとつの形：ScriptUI 単一スクリプト版<a class="vx-header-anchor" href="#ae-のもうひとつの形：scriptui-単一スクリプト版" vx-data-anchor-icon="¶"></a></h3>
+<p class="source-line" data-source-line="122">CEP パネルが読み込めないときの代替手段です。機能は同じですが、UI は旧来の ExtendScript ウィジェット（スクロールバーなし）です。</p>
+<p class="source-line" data-source-line="124">次の2つをセットで AE のスクリプトパネルフォルダーへコピーします：</p>
+<div class="code-toolbar"><pre class="language-txt line-numbers"><code class="source-line language-txt" data-source-line="126">歌词字幕排版工具.jsx     ← エントリ bootstrap。ScriptUI Panels 直下に置くこと
+lyric_modules/           ← 各モジュール .jsx を格納したフォルダー
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div>
+<table class="source-line" data-source-line="131">
+<thead>
+<tr>
+<th></th>
+<th>ScriptUI Panels フォルダー</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows</td>
+<td><code>&lt;AE インストール先&gt;\Support Files\Scripts\ScriptUI Panels\</code></td>
+</tr>
+<tr>
+<td>macOS</td>
+<td><code>~/Library/Application Support/Adobe/After Effects &lt;バージョン&gt;/Scripts/ScriptUI Panels/</code>（ここなら管理者権限は不要）</td>
+</tr>
+</tbody>
+</table>
+<p class="source-line" data-source-line="136">コピーするのはこの2つだけです。<code>lyric_modules</code> の中の <code>.jsx</code> を単体でコピー<strong>しないでください</strong>。<br>
+AE がそれぞれを独立したパネルとして「ウィンドウ」メニューに十数個並べてしまいます。<br>
+AE 再起動後のメニューは <code>ウィンドウ &gt; 歌詞字幕排版工具</code> です。</p>
+<blockquote>
+<p class="source-line" data-source-line="140">ExtendScript の単一コンパイル単位には約 107KB の上限があるため、プラグインは bootstrap + 小さなモジュール群に分割され、<br>
+実行時に bootstrap が <code>$.evalFile</code> で順に読み込みます。そのため <code>lyric_modules</code> は bootstrap と同じフォルダーに置く必要があります。<br>
+中国語パスが読めない環境では、同じフォルダーの <code>LyricSubtitleTool_AE.jsx</code>（内容は同一、ファイル名が ASCII）を使ってください。</p>
+</blockquote>
+<hr>
+<h2 id="5分でわかるクイックスタート（1曲を2言語字幕にする）" class="source-line" data-source-line="146">5分でわかるクイックスタート（1曲を2言語字幕にする）<a class="vx-header-anchor" href="#5分でわかるクイックスタート（1曲を2言語字幕にする）" vx-data-anchor-icon="¶"></a></h2>
+<ol>
+<li class="source-line" data-source-line="148"><strong>まず満足できる字幕を1本手作業で作る</strong> —— テキストレイヤーを新規作成し、フォント・サイズ・境界線・位置をお好みに調整。<br>
+このレイヤーが後の「テンプレート」になります。</li>
+<li class="source-line" data-source-line="150">パネルを開く →「歌詞の読み込み」タブ → ①「歌詞 / 字幕ファイルを開く…」で <code>.lrc</code> / <code>.srt</code> / <code>.ass</code> を選択<br>
+（文字化けしたら「エンコード」を GBK にして読み直し）</li>
+<li class="source-line" data-source-line="152">② 対象コンポジション：コンポジションを選択（未選択なら「コンポジションがなければ自動作成」にチェック）</li>
+<li class="source-line" data-source-line="153">④ タイムラインと2言語：<code>2言語レイヤー = 原文 / 訳文を別レイヤーに</code> を選び、行間は <code>0</code> のままでサイズ × 1.25</li>
+<li class="source-line" data-source-line="154">⑤ テンプレートレイヤー：「選択レイヤーを使用」で手順1のレイヤーを指定</li>
+<li class="source-line" data-source-line="155">⑥「字幕レイヤーを生成」をクリック</li>
+</ol>
+<p class="source-line" data-source-line="157">全体がずれた場合は再生成不要です。「全体オフセット / 追加ディレイ / 早めに終了」を調整してもう一度実行してください。</p>
+<p class="source-line" data-source-line="159">PR 版：流れは同じで、最後に「出力と生成」タブで「字幕トラックを生成」をクリックします。</p>
+<hr>
+<h2 id="機能詳細" class="source-line" data-source-line="163">機能詳細<a class="vx-header-anchor" href="#機能詳細" vx-data-anchor-icon="¶"></a></h2>
+<p class="source-line" data-source-line="165">パネル上部がタブです。以下タブごとに説明します。各タブ内の <code>①②③…</code> は折りたたみブロックで、<br>
+見出しをクリックすると開閉します。右上で「複数同時に展開」に切り替えられます。</p>
+<h3 id="ae-版" class="source-line" data-source-line="168">AE 版<a class="vx-header-anchor" href="#ae-版" vx-data-anchor-icon="¶"></a></h3>
+<h4 id="歌詞の読み込み" class="source-line" data-source-line="170">歌詞の読み込み<a class="vx-header-anchor" href="#歌詞の読み込み" vx-data-anchor-icon="¶"></a></h4>
+<table class="source-line" data-source-line="172">
+<thead>
+<tr>
+<th>ブロック</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 歌詞テキスト</td>
+<td>大きなテキスト欄に直接貼り付け。「歌詞 / 字幕ファイルを開く…」でファイル選択。「フォルダーを走査…」でディレクトリ内の字幕ファイルを一覧化し、選んで「選択ファイルを読み込む」。「クリップボードから貼り付け」。「エンコード」ドロップダウン（自動 / UTF-8 / GBK / GB2312…、文字化けはここで解決）<br><strong>.ass の字幕スタイルを適用</strong>：ASS / SSA のみ有効。チェック時はファイルの <code>[V4+ Styles]</code> にあるフォント・サイズ・色・境界線を使用し、チェックを外すと下の「③ タイポグラフィ」に従います<br><strong>訳文を使用（2言語）</strong>：チェックすると訳文を別テキストとして扱い、「訳文の対応許容差(秒)」でタイムコードによりペアリング</td>
+</tr>
+<tr>
+<td>② 対象コンポジション</td>
+<td>コンポジションを選択。「中央 / 下寄せ」で現在の X/Y をコンポジション中央またはやや下に一発入力。未選択時は「コンポジションがなければ自動作成」で自動生成</td>
+</tr>
+<tr>
+<td>③ タイポグラフィ</td>
+<td>フォント、サイズ、トラッキング、横組み行間倍率（0 = サイズ × 1.25）、縦組み行間倍率、塗り色、境界線のオン/オフ + 色 + 幅、揃え（中央/左/右）、<strong>縦組みテキスト</strong>（右から左 / 左から右）、字幕中心 X/Y、<strong>バウンディングボックスで自動中央揃え</strong>（長い行も短い行も厳密に中央。チェック推奨）、レイヤー名の規則（歌詞テキスト / 連番 / 連番+歌詞）、レイヤーカラーラベル</td>
+</tr>
+<tr>
+<td>④ タイムラインと2言語</td>
+<td>タイムコードがない場合の既定尺、隣接行の間隔、最短/最長尺、<strong>全体オフセット</strong>（曲全体を平行移動）、追加ディレイ、早めに終了、同一タイムコードの判定許容差<br>2言語部分：レイアウト（上下2行 / 同じ行）、順序（原文が上 / 訳文が上）、<strong>2言語レイヤー</strong>（1レイヤーに統合 / 原文と訳文を別レイヤー）、2言語の行間（0 = 自動）、「同一タイムコードの各行を個別レイヤーにする」（2言語に限らず）、生成後にプリコンポーズへまとめる</td>
+</tr>
+<tr>
+<td>⑤ テンプレートレイヤー</td>
+<td>タイムライン上の既存テキストレイヤーをドロップダウンからテンプレートに指定（「選択レイヤーを使用」で現在の選択を取得）。「生成後にテンプレートレイヤーを隠す」。「レイヤー名を歌詞に変更」。<strong>テンプレートから生成した各レイヤーはそのレイヤーの複製品なので、スタイルは1文字もずれません</strong></td>
+</tr>
+<tr>
+<td>⑥ プレビューと生成</td>
+<td>「プレビュー」で解析結果（タイムコード・原文・訳文）を先に確認。「逆順で読み込む」で最後の行を最上部に。「字幕レイヤーを生成」で実行</td>
+</tr>
+<tr>
+<td>⑦ アニメーションプリセット</td>
+<td>内蔵の文字アニメーション数種 + AE 自身の <code>.ffx</code> を読み込み可能。「選択レイヤーに適用」/「このコンポジションの全テキストレイヤーに適用」。「適用前に既存のアニメーターを消す」。「字幕生成時に自動適用」。「プリセットフォルダー…」で独自ディレクトリを追加。「機能チェック」で現在の AE が対応するアニメーター属性を確認</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p class="source-line" data-source-line="182">全体のタイミングがずれても再生成は不要です。「全体オフセット / 追加ディレイ / 早めに終了」を調整して、<br>
+もう一度生成を押すだけです。</p>
+</blockquote>
+<h4 id="スタイル同期" class="source-line" data-source-line="185">スタイル同期<a class="vx-header-anchor" href="#スタイル同期" vx-data-anchor-icon="¶"></a></h4>
+<p class="source-line" data-source-line="187">「1本を手で整えたら、残り数十本を一括で追従させる」ための機能です。</p>
+<table class="source-line" data-source-line="189">
+<thead>
+<tr>
+<th>ブロック</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 参照レイヤー</td>
+<td>参照レイヤーを選択（「現在の選択レイヤーを取得」）。⚠ <strong>「レイヤースタイル」（ドロップシャドウ / 境界線 / 外側グロー / ベベル）は引き継げません</strong> —— AE のスクリプト API が公開していないためです。一緒に移したい場合は <code>.ffx</code> を使用（下の「注意事項」参照）</td>
+</tr>
+<tr>
+<td>② 適用先レイヤー</td>
+<td>レイヤー番号は <code>1-10</code>、<code>1,5,10</code>、<code>1-3,7,9-11</code> に対応。「テキストレイヤーのみ処理」。「参照レイヤー自身を除外」</td>
+</tr>
+<tr>
+<td>③ 2言語レイヤー</td>
+<td>原文 / 訳文が対になる場合に使用：「もう一方の組」が使う参照レイヤーを指定。範囲（すべて / 参照レイヤーと同じ組のみ / もう一方の組のみ）。<strong>2言語の位置</strong>（参照レイヤーをそのままコピー＝2組が重なる / 上下のずれを保持＝推奨 / まったく動かさない）。行間。「グルーピングを走査」でペアリングの認識を確認</td>
+</tr>
+<tr>
+<td>④ コピーする内容</td>
+<td>テキストスタイル、テキスト内容も上書き（既定はオフで各レイヤーの歌詞を保持）、トランスフォーム属性、レイヤー属性（ブレンドモード / 3D / モーションブラー / ラベル色）、キーフレーム、イージングと補間曲線、キーフレームがない場合の静的値コピー、エクスプレッション、エフェクト（エフェクトスタック全体）、マスク、テキストアニメーター<br><strong>キーフレームの調整</strong>：各レイヤーのイン/アウト点に合わせてスケール（推奨）/ 全体を平行移動して元のリズムを保つ / 処理しない（絶対時間を維持）</td>
+</tr>
+</tbody>
+</table>
+<p class="source-line" data-source-line="196">3つの実行ボタンの違い：</p>
+<table class="source-line" data-source-line="198">
+<thead>
+<tr>
+<th>ボタン</th>
+<th>動作</th>
+<th>使いどころ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>対象レイヤーに適用</td>
+<td>参照レイヤーの属性を<strong>1つずつ深くコピー</strong>して対象レイヤーへ。テキスト内容は変更しない</td>
+<td>レイヤーは既に生成済みで、見た目だけ揃えたい</td>
+</tr>
+<tr>
+<td>参照レイヤーから再構築</td>
+<td>参照レイヤー自体を複製（AE 内部の複製なのでスタイル / エフェクト / アニメーター / マスクもすべて付随）し、各レイヤー元の文字とイン/アウト点を書き戻してから旧レイヤーを削除</td>
+<td>手作業の Ctrl+D + 打ち直しに相当。スタイルが最もずれにくい</td>
+</tr>
+<tr>
+<td>テキストスタイルのみ同期</td>
+<td>最も軽量。フォント / サイズ / 色 / 境界線 / 行間 / トラッキング / 揃えだけを変更</td>
+<td>フォントだけ揃えたい、他は触りたくない</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p class="source-line" data-source-line="204">⚠ 「参照レイヤーから再構築」は<strong>元のレイヤーを削除します</strong>（操作全体が1回の取り消しにまとまるので Ctrl+Z で戻せます）。<br>
+実行前にプロジェクトを保存してください。</p>
+</blockquote>
+<h4 id="オンライン歌詞" class="source-line" data-source-line="207">オンライン歌詞<a class="vx-header-anchor" href="#オンライン歌詞" vx-data-anchor-icon="¶"></a></h4>
+<p class="source-line" data-source-line="209">プラットフォーム（NetEase Cloud Music / QQ Music）→ キーワード（曲名・アーティスト・曲のリンク・曲 ID のいずれでも可）→「検索」→<br>
+結果一覧から選択 →「歌詞を取得（訳文つき）」→「歌詞の読み込みタブへ送る」。<br>
+ネット接続が必要です。歌詞は公開 API 由来で、正確性と著作権は各プラットフォームおよび作詞・作曲者に帰属します。<br>
+個人の学習・研究目的での利用を想定しています。</p>
+<h4 id="設定" class="source-line" data-source-line="214">設定<a class="vx-header-anchor" href="#設定" vx-data-anchor-icon="¶"></a></h4>
+<ul>
+<li class="source-line" data-source-line="216"><strong>UI 言語</strong>：簡体字中国語 / 繁体字中国語 / English / 日本語 / システムに従う。パネルとスクリプトのメッセージのみに影響し、<br>
+AE 本体の UI は変わりません。変更は即時反映されます。</li>
+<li class="source-line" data-source-line="218"><strong>バージョン情報</strong>：現在のビルド番号（リリース日時のタイムスタンプ）+ プラグインの場所 + 「拡張機能フォルダーを開く」。</li>
+<li class="source-line" data-source-line="219"><strong>パネル設定</strong>：CEP のブラウザーローカルストレージに保存され、<strong>.aep プロジェクトには書き込まれません</strong>。<br>
+「既定値に戻す」で一括リセットできます。</li>
+</ul>
+<h4 id="情報-/-セルフテスト" class="source-line" data-source-line="222">情報 / セルフテスト<a class="vx-header-anchor" href="#情報-/-セルフテスト" vx-data-anchor-icon="¶"></a></h4>
+<p class="source-line" data-source-line="224">「セルフテストを実行」でホストの読み込み状態・AE バージョン・機能検出の結果を下の欄に出力します。<br>
+「オンライン経路チェック（実際に1回検索します）」でネットワーク経路が通るかを検証します。<br>
+問題が起きたときは、この2つの出力を貼ってもらうのが一番早い解決法です。</p>
+<h3 id="pr-版" class="source-line" data-source-line="228">PR 版<a class="vx-header-anchor" href="#pr-版" vx-data-anchor-icon="¶"></a></h3>
+<h4 id="歌詞の読み込み-1" class="source-line" data-source-line="230">歌詞の読み込み<a class="vx-header-anchor" href="#歌詞の読み込み-1" vx-data-anchor-icon="¶"></a></h4>
+<p class="source-line" data-source-line="232">ブロックは AE 版と完全には対応していません：</p>
+<table class="source-line" data-source-line="234">
+<thead>
+<tr>
+<th>PR 版</th>
+<th>対応する AE 版</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 歌詞テキスト</td>
+<td>① 歌詞テキスト</td>
+<td>完全に同じ（貼り付け / ファイル選択 / フォルダー走査 / クリップボード / エンコード / ASS スタイル / 訳文ペアリング）</td>
+</tr>
+<tr>
+<td>② 対象シーケンス（タイムライン）</td>
+<td>② 対象コンポジション</td>
+<td>コンポジションの代わりにシーケンスを選択</td>
+</tr>
+<tr>
+<td>③ タイムラインと2言語</td>
+<td>④ タイムラインと2言語</td>
+<td>「2言語レイヤー / 2言語の行間 / 各行を個別レイヤー / プリコンポーズにまとめる」はなし —— 字幕トラックは元々1本ずつの積み重ねだから</td>
+</tr>
+<tr>
+<td>④ プレビュー</td>
+<td>⑥ プレビューと生成</td>
+<td>プレビューのみ。生成は「出力と生成」タブ</td>
+</tr>
+</tbody>
+</table>
+<p class="source-line" data-source-line="241"><strong>「タイポグラフィ」ブロックはありません</strong> —— PR の字幕トラックの見た目は PR 自身の「キャプションスタイル」が決めるもので、<br>
+スクリプトからは変更できません。<br>
+見た目を揃えるには：生成後に「キャプション」パネルで一度設定すれば、トラック全体が追従します。</p>
+<blockquote>
+<p class="source-line" data-source-line="245">PR のタイムラインは 0 秒から始まります。動画内の音楽に合わせる場合は、「全体オフセット」を音楽の開始位置に設定してください。</p>
+</blockquote>
+<h4 id="出力と生成" class="source-line" data-source-line="247">出力と生成<a class="vx-header-anchor" href="#出力と生成" vx-data-anchor-icon="¶"></a></h4>
+<table class="source-line" data-source-line="249">
+<thead>
+<tr>
+<th>ボタン</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字幕トラックを生成</td>
+<td>解析結果を <code>.srt</code> に書き出し → プロジェクトパネルの「歌詞字幕ツール」ビンへ読み込み → PR の字幕トラック作成 API を呼び出し</td>
+</tr>
+<tr>
+<td>SRT ファイルだけ書き出す…</td>
+<td>ファイルのみ。タイムラインは変更しない（他用途に使う / 自分で読み込む）</td>
+</tr>
+<tr>
+<td>既存の字幕トラックを見る</td>
+<td>シーケンス上の既存字幕トラックと本数を一覧表示</td>
+</tr>
+</tbody>
+</table>
+<p class="source-line" data-source-line="255">「2言語の原文と訳文を1つの字幕にまとめる」にチェックすると、原文と訳文が同じ字幕（2行）に入ります。<br>
+チェックを外すとそれぞれ別の字幕になります。</p>
+<blockquote>
+<p class="source-line" data-source-line="258">生成後に位置がずれた場合は、字幕トラック全体をドラッグするか、個々の字幕のイン/アウト点を変更してください。<br>
+PR はスクリプトによる字幕トラックの削除を許可していません。重複生成で増えた分は右クリックで削除してください。</p>
+</blockquote>
+<h4 id="オンライン歌詞-/-設定-/-情報-·-セルフテスト" class="source-line" data-source-line="261">オンライン歌詞 / 設定 / 情報 · セルフテスト<a class="vx-header-anchor" href="#オンライン歌詞-/-設定-/-情報-·-セルフテスト" vx-data-anchor-icon="¶"></a></h4>
+<p class="source-line" data-source-line="263">AE 版と同じです。</p>
+<hr>
+<h2 id="注意事項" class="source-line" data-source-line="267">注意事項<a class="vx-header-anchor" href="#注意事項" vx-data-anchor-icon="¶"></a></h2>
+<ol>
+<li class="source-line" data-source-line="269"><strong>インストール後は必ずホストを「完全に終了」してから再起動</strong>。ウィンドウを閉じるだけでは不十分です ——<br>
+CEP 拡張機能もスクリプトエンジンもプロセス起動時に読み込まれます。</li>
+<li class="source-line" data-source-line="271"><strong>「参照レイヤーから再構築」は元のレイヤーを削除します</strong>。操作全体が1回の取り消しにまとまるので Ctrl+Z で戻せますが、<br>
+その後さらに別の編集をすると取り消しが複雑になります —— 実行前にプロジェクトを保存してください。</li>
+<li class="source-line" data-source-line="273"><strong>レイヤースタイル（ドロップシャドウ / 境界線 / 外側グロー / ベベルとエンボス）は同期できません</strong>。<br>
+AE のスクリプト API が公開していないためです。<br>
+一緒に移したい場合：参照レイヤーを選択 → メニュー「アニメーション &gt; アニメーションプリセットを保存」で <code>.ffx</code> として保存<br>
+→ 「歌詞の読み込み」タブの ⑦ でそれを選んで適用。<br>
+境界線だけなら「テキストプロパティ → 境界線」または「エフェクト → 生成 → 境界線」は同期できます。</li>
+<li class="source-line" data-source-line="278"><strong>縦組みテキストにはバージョン要件があります</strong>。AE 2024（24.2）以降はネイティブ縦組み、<br>
+それ以前は「1文字ずつ改行」する模擬方式へ自動フォールバックします。使えますがネイティブほど精細ではなく、<br>
+約物の位置が多少異なる場合があります。</li>
+<li class="source-line" data-source-line="281"><strong>長時間の処理中はパネルが「固まった」ように見えます</strong>。生成 / 同期 / 検索はいずれも同期ブロッキングで、<br>
+スクリプト実行中はパネルが反応しません。これはホストとの通信方式によるもので、フリーズではありません。<br>
+進捗はパネル下部のステータスバーで確認し、連打しないでください。</li>
+<li class="source-line" data-source-line="284"><strong>オンライン歌詞は NetEase Cloud Music と QQ Music の2プラットフォームのみ</strong>で、ネット接続が必要です。<br>
+歌詞は公開 API 由来で、内容の正確性と著作権は各プラットフォームおよび作詞・作曲者に帰属します。<br>
+個人の学習・研究目的にのみ使用してください。</li>
+<li class="source-line" data-source-line="287"><strong>パネル設定はプロジェクトに付いてきません</strong>。UI 設定（言語を含む）は CEP のブラウザーローカルストレージに保存され、<br>
+<code>.aep</code> / <code>.prproj</code> には書き込まれません。別のマシンでは設定し直しが必要です。</li>
+</ol>
+<hr>
+<h2 id="アンインストール" class="source-line" data-source-line="292">アンインストール<a class="vx-header-anchor" href="#アンインストール" vx-data-anchor-icon="¶"></a></h2>
+<h3 id="ae-/-pr-の-cep-パネル版" class="source-line" data-source-line="294">AE / PR の CEP パネル版<a class="vx-header-anchor" href="#ae-/-pr-の-cep-パネル版" vx-data-anchor-icon="¶"></a></h3>
+<p class="source-line" data-source-line="296"><strong>ステップ 1 ホストを終了</strong>（AE / PR を完全に終了。ウィンドウを閉じるだけでは不可）。</p>
+<p class="source-line" data-source-line="298"><strong>ステップ 2 拡張機能フォルダーを丸ごと削除</strong>：</p>
+<table class="source-line" data-source-line="300">
+<thead>
+<tr>
+<th></th>
+<th>削除するフォルダー</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows</td>
+<td><code>C:\Users\&lt;ユーザー名&gt;\AppData\Roaming\Adobe\CEP\extensions\LyricSubtitleTool_AE</code><br>（PR 版は <code>LyricSubtitleTool_PR</code>）</td>
+</tr>
+<tr>
+<td>macOS</td>
+<td><code>~/Library/Application Support/Adobe/CEP/extensions/LyricSubtitleTool_AE</code><br>（Finder で <code>Cmd+Shift+G</code> を押してパスを貼り付け）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p class="source-line" data-source-line="305">スタートメニューで <code>%APPDATA%</code> を検索して Enter、<code>Adobe\CEP\extensions\</code> を開けば見つかります。<br>
+フォルダーを消せば十分です。インストーラーもサービスもスタートアップ項目もありません。</p>
+</blockquote>
+<p class="source-line" data-source-line="308"><strong>ステップ 3（任意）デバッグモードをオフにする。</strong><br>
+このプラグインは自己署名の拡張機能で、<code>PlayerDebugMode</code> があるから読み込まれます。不要なら削除できます：</p>
+<div class="code-toolbar"><pre class="language-bash line-numbers"><code class="source-line language-bash" data-source-line="311"><span class="token comment"># Windows：regedit → HKEY_CURRENT_USER\Software\Adobe\CSXS.11 → PlayerDebugMode を削除</span>
+<span class="token comment"># macOS：</span>
+<span class="token keyword">for</span> <span class="token for-or-select variable">v</span> <span class="token keyword">in</span> <span class="token number">9</span> <span class="token number">10</span> <span class="token number">11</span> <span class="token number">12</span> <span class="token number">13</span> <span class="token number">14</span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+  defaults delete com.adobe.CSXS.<span class="token variable">$v</span> PlayerDebugMode <span class="token operator"><span class="token file-descriptor important">2</span>&gt;</span>/dev/null
+<span class="token keyword">done</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div>
+<p class="source-line" data-source-line="319">⚠ 削除すると<strong>他に自分で入れた未署名の拡張機能もすべて動かなくなります</strong>（今後入れたい同種のプラグインも含む）。<br>
+このプラグインだけを外したいなら、ステップ 2 で十分です。デバッグモードを残しても害はありません。</p>
+<p class="source-line" data-source-line="322"><strong>ステップ 4 ホストを再起動</strong>すれば、メニューの項目は消えます。</p>
+<p class="source-line" data-source-line="324"><strong>パネルが残した設定</strong>：拡張機能フォルダーと一緒に到達不能になります（その拡張機能のローカルストレージにあるため）。<br>
+明示的に消したい場合は、アンインストール前に「設定」タブで「既定値に戻す」を押してください。</p>
+<h3 id="ae-の-scriptui-単一スクリプト版" class="source-line" data-source-line="327">AE の ScriptUI 単一スクリプト版<a class="vx-header-anchor" href="#ae-の-scriptui-単一スクリプト版" vx-data-anchor-icon="¶"></a></h3>
+<p class="source-line" data-source-line="329">次の2つを削除して、AE を再起動します：</p>
+<div class="code-toolbar"><pre class="language-txt line-numbers"><code class="source-line language-txt" data-source-line="331">&lt;ScriptUI Panels フォルダー&gt;\歌词字幕排版工具.jsx
+&lt;ScriptUI Panels フォルダー&gt;\lyric_modules\          ← フォルダーごと
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div>
+<p class="source-line" data-source-line="336">ASCII ファイル名を使った場合は <code>LyricSubtitleTool_AE.jsx</code> を削除します。<br>
+この2つだけを削除してください。ScriptUI Panels フォルダーを空にしないでください —— AE 標準のスクリプトも入っています。</p>
+<hr>
+<h2 id="faq" class="source-line" data-source-line="341">FAQ<a class="vx-header-anchor" href="#faq" vx-data-anchor-icon="¶"></a></h2>
+<p class="source-line" data-source-line="343"><strong>歌詞が文字化けする？</strong><br>
+パネルで「エンコード」を GBK に変更して読み直してください（古い LRC はほぼ GBK です）。</p>
+<p class="source-line" data-source-line="346"><strong>PR で生成した字幕のスタイルがおかしい？</strong><br>
+字幕トラックの見た目は PR の「キャプションスタイル」が決めるもので、ExtendScript には字幕スタイルを書く <strong>API がありません</strong>。<br>
+「キャプション」パネルで一度設定すれば、トラック全体が追従します。</p>
+<p class="source-line" data-source-line="350"><strong>PR で何度も生成したら字幕トラックが複数できた？</strong><br>
+PR はスクリプトによる字幕トラックの削除を許可していません。余分なものは右クリックで削除してください。</p>
+<p class="source-line" data-source-line="353"><strong>PR の「グラフィッククリップ」はなぜ停止した？</strong><br>
+PR 自身が書き出した <code>.mogrt</code> の内部形式は <code>prgraphic</code> で、テキストパラメーター（<code>TextLayer</code>）をスクリプトから書き込めません ——<br>
+クリップは挿入され、本数も合い、<code>setValue</code> もエラーを出さないのに、画面上は永遠にテンプレートのプレースホルダーのままです。<br>
+変更できるのは AE から書き出した <code>aegraphic</code> テンプレート（テキストパラメーター名が <code>Text</code>）だけです。<br>
+独自スタイルが必要な場合の正解は<strong>AE でテンプレートを作る</strong>こと：スタイルを整える → エッセンシャルグラフィックスパネル → モーショングラフィックステンプレートを書き出す。</p>
+<p class="source-line" data-source-line="359"><strong>Linux で使える？</strong><br>
+使えません。Adobe は Premiere Pro / After Effects の Linux 版を提供していません。</p>
+<p class="source-line" data-source-line="362"><strong>コードを変更した後はどうインストールする？</strong><br>
+下の「ソースからビルド」を参照してください。</p>
+<hr>
+<h2 id="ソースからビルド（開発用）" class="source-line" data-source-line="367">ソースからビルド（開発用）<a class="vx-header-anchor" href="#ソースからビルド（開発用）" vx-data-anchor-icon="¶"></a></h2>
+<p class="source-line" data-source-line="369"><strong>Python 3.8+</strong>（標準ライブラリのみ、サードパーティ製パッケージ不要）と <strong>Node.js</strong>（テスト実行のみ）が必要です。</p>
+<div class="code-toolbar"><pre class="language-bash line-numbers"><code class="source-line language-bash" data-source-line="371">python _tools/build_AEJSX.py      <span class="token comment"># ScriptUI 単一スクリプト版 → AE_JSX/</span>
+python _tools/build_AECEP.py      <span class="token comment"># AE CEP 版 → AE_CEP/dist/LyricSubtitleTool_AE/</span>
+python _tools/build_PRCEP.py      <span class="token comment"># PR CEP 版 → PR_CEP/dist/LyricSubtitleTool_PR/</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div>
+<p class="source-line" data-source-line="377">3つとも <code>install</code> を付けられ、ビルド後に CEP 拡張機能フォルダーへ直接インストールします<br>
+（Windows はレジストリ、macOS は <code>defaults write</code> でデバッグモードを有効化）：</p>
+<div class="code-toolbar"><pre class="language-bash line-numbers"><code class="source-line language-bash" data-source-line="380">python _tools/build_AECEP.py <span class="token function">install</span>
+python _tools/build_PRCEP.py <span class="token function">install</span> --no-reg    <span class="token comment"># インストールのみ、デバッグモードは触らない</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div>
+<p class="source-line" data-source-line="385">ビルド時に以下の検査を実行し、1つでも通らなければ中断します。<strong>壊れた生成物がホストへインストールされることはありません</strong>：<br>
+ES3 構文（acorn）、正規表現内の裸のスラッシュ、UTF-8 BOM、単一コンパイル単位 104KB（107000 バイト）上限、<br>
+manifest XML の解析可否、フロントエンドのコントロール ID の突き合わせ、モジュール一覧の整合性。</p>
+<blockquote>
+<p class="source-line" data-source-line="389">ES3 の厳密チェック（acorn）には追加ファイルが必要です：<code>python _tools/fetch_acorn.py</code>。<br>
+ダウンロードしなくてもビルドはできますが、その項目は「スキップ」と表示されます ——<br>
+ローカルで全チェックを回したい場合は一度このコマンドを実行してください（CI では自動でダウンロードされます）。</p>
+</blockquote>
+<p class="source-line" data-source-line="393"><strong><code>dist/</code> には拡張機能そのものだけを入れます</strong>：<code>client/</code>、<code>CSXS/</code>、<code>host/</code>、<code>.debug</code> の4つ。<br>
+このフォルダーを CEP の <code>extensions</code> ディレクトリへ丸ごとドラッグすれば使えます。<br>
+説明書（<code>README_*.html</code> + <code>image/</code>）と <code>Add Keys.reg</code> は<strong>拡張機能フォルダーには入れません</strong> ——<br>
+これらは下のコマンドが作るリリースフォルダーの担当で、ユーザーが実際に目にするのはそちらです。</p>
+<p class="source-line" data-source-line="397"><strong>リリース用パッケージ</strong>：<code>python _tools/package_release.py</code> は2つの <code>dist/</code> を1つの<br>
+バージョンフォルダー <code>release/LyricSubtitleTool_v&lt;バージョン&gt;/</code> にまとめます。中身は<br>
+<code>LyricSubtitleTool_AE/</code>、<code>LyricSubtitleTool_PR/</code>、<code>Add Keys.reg</code>、4つの <code>README_*.html</code>、<br>
+<code>image/</code> です。バージョン番号は <code>00_header.jsx</code> から取得（manifest に書かれるものと同じ）で、<br>
+毎回フォルダーを空にしてから作り直すため前回の残骸は残りません。<br>
+<strong>スクリプトは zip を作りません</strong> —— バージョンフォルダーを右クリック →「ZIP ファイルに圧縮」。<br>
+（<code>LyricSubtitleTool_AE</code> だけを圧縮すると説明書と reg が抜けます。）</p>
+<hr>
+<h2 id="リポジトリ構成" class="source-line" data-source-line="405">リポジトリ構成<a class="vx-header-anchor" href="#リポジトリ構成" vx-data-anchor-icon="¶"></a></h2>
+<div class="code-toolbar"><pre class="language-txt line-numbers"><code class="source-line language-txt" data-source-line="407">AE_JSX/     ScriptUI 版のソース（src/）とビルド生成物（歌词字幕排版工具.jsx + lyric_modules/）
+AE_CEP/     AE の CEP 版：client/ フロントエンド + host/ ブリッジ → dist/ がそのままインストール可能な完成品
+PR_CEP/     PR の CEP 版：client/ + host/{10_pr_seq,11_pr_caption,12_pr_graphics}
+tests/      ユニットテスト（Node / Python、AE / PR 不要）+ ae/ 実機セルフテスト + probes/ 使い捨てプローブ
+_tools/     ビルド、インストール、i18n、テンプレート走査などのスクリプト
+docs/       開発ドキュメント、AE スクリプト入門、2言語の設計メモ、診断レポート。README_*.html はリリースフォルダーのルートへ
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div>
+<p class="source-line" data-source-line="416">3つのパネルは同一のロジック層（解析 / エンコード / 多言語 / オンライン歌詞）を共有し、<br>
+ホスト適配層と UI 層だけが異なります。</p>
+<hr>
+<h2 id="テスト" class="source-line" data-source-line="421">テスト<a class="vx-header-anchor" href="#テスト" vx-data-anchor-icon="¶"></a></h2>
+<div class="code-toolbar"><pre class="language-bash line-numbers"><code class="source-line language-bash" data-source-line="423">node tests/test_logic.js      <span class="token comment"># 123 項目  解析 / エンコード / タイムライン / レイヤー番号</span>
+node tests/test_pr.js         <span class="token comment"># 220 項目  PR ホスト：時間換算 / 字幕トラック / サイレント失敗 / テキスト書き込み</span>
+node tests/test_net.js        <span class="token comment"># 43 項目   パネル側ネットワーク層 + .mogrt の読み込み</span>
+node tests/test_i18n.js       <span class="token comment"># 54 項目   4言語の key 集合の一致</span>
+python tests/test_atguard.py  <span class="token comment"># エクスプレッション注入の防御</span>
+python tests/test_platform.py <span class="token comment"># クロスプラットフォーム：CEP 拡張機能フォルダー / AE スクリプトフォルダー / デバッグモード分岐</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div>
+<p class="source-line" data-source-line="432">いずれも AE / PR の起動は不要です。実機セルフテストは <code>tests/ae/</code> にあり、<br>
+<code>python _tools/run_ae_selftest.py</code> で AE を起動して実行します。</p>
+<p class="source-line" data-source-line="435">CI（<code>.github/workflows/tests.yml</code>）は <strong>Ubuntu / Windows / macOS</strong> の3システムでビルドを1回ずつ実行します ——<br>
+生成物自体はクロスプラットフォームですが、「どこへインストールするか」「どうデバッグモードを有効にするか」は<br>
+まったく別のコード経路で、Linux だけで回すと macOS 側は永遠に検証されません。</p>
+<p class="source-line" data-source-line="439">多言語（簡体字 / 繁体字 / 英語 / 日本語）の取り決め：<strong>中国語の原文がそのまま key</strong> です。<br>
+文言を変えるときは <code>_tools/i18n/*.json</code> を同期して変更し、<code>python _tools/build_i18n.py</code> を実行してください。<br>
+詳細は <a href="docs/%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3.html"><code>docs/开发文档.md</code></a> を参照。</p>
+<hr>
+<h2 id="既知の制限" class="source-line" data-source-line="445">既知の制限<a class="vx-header-anchor" href="#既知の制限" vx-data-anchor-icon="¶"></a></h2>
+<ul>
+<li class="source-line" data-source-line="447">PR のキャプションスタイルとキャプションテキストには<strong>スクリプト用の読み書き API がありません</strong>（Adobe 未提供）</li>
+<li class="source-line" data-source-line="448">「キャプションをグラフィックにアップグレード」は UI 専用機能で API はありません</li>
+<li class="source-line" data-source-line="449">PR は SVG を直接読み込めません。PNG を経由してください</li>
+<li class="source-line" data-source-line="450">AE の ScriptUI では縦スクロールするコンテナを作れません（CEP 版が存在する理由）</li>
+<li class="source-line" data-source-line="451">ExtendScript の単一コンパイル単位は約 104KB（107000 バイト）上限のため、モジュール分割が必須<br>
+（言語表は言語ごとに a/b の2分割済み）</li>
+</ul>
+<hr>
+<h2 id="ライセンス" class="source-line" data-source-line="456">ライセンス<a class="vx-header-anchor" href="#ライセンス" vx-data-anchor-icon="¶"></a></h2>
+<p class="source-line" data-source-line="458"><a href="LICENSE">MIT</a></p>
+</div>
+        </div>
+    </div>
+    </div>
+
+    <!-- VX_OUTLINE_BUTTON_START -->
+    <div id="container-floating" style="display:none;" class="d-none d-md-block d-xl-block">
+        <div id="floating-button" onclick="toggleMore()">
+            <p id="floating-more" class="more">&gt;</p>
+        </div>
+    </div>
+    <!-- VX_OUTLINE_BUTTON_END -->
+</body>
+</html>

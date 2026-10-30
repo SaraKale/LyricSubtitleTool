@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title data-i18n="歌词字幕排版工具 · PR 版">歌词字幕排版工具 · PR 版</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="tabbar">
+  <button class="tabbtn active" data-tab="import" data-i18n="歌词导入">歌词导入</button>
+  <button class="tabbtn" data-tab="output" data-i18n="输出与生成">输出与生成</button>
+  <button class="tabbtn" data-tab="online" data-i18n="在线歌词">在线歌词</button>
+  <button class="tabbtn" data-tab="settings" data-i18n="设置">设置</button>
+  <button class="tabbtn" data-tab="about" data-i18n="关于 / 自检">关于 / 自检</button>
+  <span class="grow"></span>
+  <span class="build" id="buildTag">…</span>
+</div>
+
+<!-- ============================ 歌词导入 ============================ -->
+<div class="tabpane active" id="tab-import">
+  <div class="toolbar">
+    <button id="btnExpandAll" data-i18n="全部展开">全部展开</button>
+    <button id="btnCollapseAll" data-i18n="全部折叠">全部折叠</button>
+    <label class="chk"><input type="checkbox" id="multiChk" checked> <span data-i18n="同时展开多块">同时展开多块</span></label>
+    <span class="hint" data-i18n="不勾＝单开模式（展开一块自动收起其它）">不勾＝单开模式（展开一块自动收起其它）</span>
+  </div>
+
+  <section class="sec" data-key="lyrics">
+    <div class="sec-head"><span class="arrow">▼</span> <span data-i18n="① 歌词文本（LRC / SRT / ASS / 纯文本）">① 歌词文本（LRC / SRT / ASS / 纯文本）</span></div>
+    <div class="sec-body">
+      <textarea id="lyricText" class="lyric" spellcheck="false"
+                data-i18n-placeholder="[00:12.34]第一句歌词  [00:15.67]第二句歌词"></textarea>
+      <div class="row">
+        <button id="btnOpenLrc" data-i18n="打开歌词/字幕文件…">打开歌词/字幕文件…</button>
+        <button id="btnScanFolder" data-i18n="扫描文件夹…">扫描文件夹…</button>
+        <button id="btnClear" data-i18n="清空">清空</button>
+        <button id="btnPaste" data-i18n="从剪贴板粘贴">从剪贴板粘贴</button>
+        <label class="fld"><span data-i18n="编码">编码</span> <select id="encodingList"></select></label>
+      </div>
+      <div class="row">
+        <label class="fld grow"><span data-i18n="文件夹里找到的">文件夹里找到的</span>
+          <select id="fileList"><option data-i18n="（还没有扫描）">（还没有扫描）</option></select>
+        </label>
+        <button id="btnLoadFile" data-i18n="载入选中文件">载入选中文件</button>
+      </div>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="assStyle" checked> <span data-i18n="套用 .ass 里的字幕样式">套用 .ass 里的字幕样式</span></label>
+        <span class="hint" data-i18n="不勾＝全部按下面的排版样式走">不勾＝全部按下面的排版样式走</span>
+      </div>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="hasTrans"> <span data-i18n="使用译文（双语）">使用译文（双语）</span></label>
+        <label class="fld"><span data-i18n="译文对齐容差(秒)">译文对齐容差(秒)</span> <input type="text" id="matchTol" value="0.6" class="num"></label>
+        <button id="btnClearTrans" data-i18n="清空译文">清空译文</button>
+        <span class="hint" id="transInfo" data-i18n="没有译文">没有译文</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" data-key="seq">
+    <div class="sec-head"><span class="arrow">▼</span> <span data-i18n="② 目标序列（时间线）">② 目标序列（时间线）</span></div>
+    <div class="sec-body">
+      <div class="row">
+        <label class="fld grow"><span data-i18n="序列">序列</span> <select id="seqList"></select></label>
+        <button id="btnRefreshSeq" data-i18n="刷新">刷新</button>
+      </div>
+      <div class="hint block" id="seqHint"></div>
+    </div>
+  </section>
+
+  <section class="sec" data-key="time">
+    <div class="sec-head"><span class="arrow">▼</span> <span data-i18n="③ 时间轴与双语">③ 时间轴与双语</span></div>
+    <div class="sec-body">
+      <div class="row">
+        <label class="fld"><span data-i18n="无时间码时长(s)">无时间码时长(s)</span> <input type="text" id="defaultDur" value="2" class="num"></label>
+        <label class="fld"><span data-i18n="相邻间隙(s)">相邻间隙(s)</span> <input type="text" id="gap" value="0.02" class="num"></label>
+        <label class="fld"><span data-i18n="最短(s)">最短(s)</span> <input type="text" id="minDur" value="0.3" class="num"></label>
+        <label class="fld"><span data-i18n="最长(s)">最长(s)</span> <input type="text" id="maxDur" value="0" class="num"></label>
+        <label class="fld"><span data-i18n="整体偏移(s)">整体偏移(s)</span> <input type="text" id="offset" value="0" class="num"></label>
+      </div>
+      <div class="row">
+        <label class="fld"><span data-i18n="额外延后(s)">额外延后(s)</span> <input type="text" id="leadIn" value="0" class="num"></label>
+        <label class="fld"><span data-i18n="提前结束(s)">提前结束(s)</span> <input type="text" id="leadOut" value="0" class="num"></label>
+        <label class="fld"><span data-i18n="同时间码判定容差(s)">同时间码判定容差(s)</span> <input type="text" id="mergeTol" value="0.02" class="num"></label>
+        <label class="fld"><span data-i18n="双语排版">双语排版</span>
+          <select id="biLayout">
+            <option value="stack" data-i18n="上下两行">上下两行</option>
+            <option value="sameLine" data-i18n="同一行">同一行</option>
+          </select>
+        </label>
+        <label class="fld"><span data-i18n="顺序">顺序</span>
+          <select id="biOrder">
+            <option value="AB" data-i18n="原文在上">原文在上</option>
+            <option value="BA" data-i18n="译文在上">译文在上</option>
+          </select>
+        </label>
+      </div>
+      <div class="hint block" data-i18n="PR 的时间线从 0 秒起算。这里的「整体偏移」是整条字幕往后推的时间；要对着视频里的音乐打轴，直接把偏移调成音乐起点即可。">PR 的时间线从 0 秒起算。这里的「整体偏移」是整条字幕往后推的时间；要对着视频里的音乐打轴，直接把偏移调成音乐起点即可。</div>
+    </div>
+  </section>
+
+  <section class="sec" data-key="preview">
+    <div class="sec-head"><span class="arrow">▼</span> <span data-i18n="④ 预览">④ 预览</span></div>
+    <div class="sec-body">
+      <div class="row">
+        <button id="btnPreview" class="primary" data-i18n="预览解析结果">预览解析结果</button>
+        <span class="hint" data-i18n="预览看到什么，生成出来就是什么">预览看到什么，生成出来就是什么</span>
+      </div>
+      <div class="preview" id="previewList"></div>
+      <div class="hint block" id="previewInfo" data-i18n="（还没有解析）">（还没有解析）</div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================ 输出与生成 ============================ -->
+<div class="tabpane" id="tab-output">
+  <div class="toolbar">
+    <button id="btnExpandOut" data-i18n="全部展开">全部展开</button>
+    <button id="btnCollapseOut" data-i18n="全部折叠">全部折叠</button>
+    <label class="chk"><input type="checkbox" id="multiChkOut" checked> <span data-i18n="同时展开多块">同时展开多块</span></label>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="落地方式：字幕轨道">落地方式：字幕轨道</div>
+    <div class="hint block" data-i18n="生成 PR 原生字幕轨：最快最稳，生成后可以在「字幕」面板里一条条改，样式由 PR 的字幕样式决定（脚本改不了）。&#10;（图形剪辑那条路已关闭：PR 自己导出的 .mogrt 是 prgraphic，脚本写不进文字 —— 插进去了、条数也对，但屏幕上永远是模板占位符。）">生成 PR 原生字幕轨：最快最稳，生成后可以在「字幕」面板里一条条改，样式由 PR 的字幕样式决定（脚本改不了）。
+（图形剪辑那条路已关闭：PR 自己导出的 .mogrt 是 prgraphic，脚本写不进文字 —— 插进去了、条数也对，但屏幕上永远是模板占位符。）</div>
+  </div>
+
+  <section class="sec" data-key="cap">
+    <div class="sec-head"><span class="arrow">▼</span> <span data-i18n="① 字幕轨道（PR 原生字幕）">① 字幕轨道（PR 原生字幕）</span></div>
+    <div class="sec-body">
+      <div class="row">
+        <button id="btnBuildCaption" class="primary" data-i18n="生成字幕轨">生成字幕轨</button>
+        <button id="btnExportSrt" data-i18n="只导出 SRT 文件…">只导出 SRT 文件…</button>
+        <button id="btnInspectCaptions" data-i18n="查看已有字幕轨">查看已有字幕轨</button>
+      </div>
+      <div class="row">
+        <label class="chk"><input type="checkbox" id="mergeSrt" checked> <span data-i18n="双语的原文和译文合成一条字幕">双语的原文和译文合成一条字幕</span></label>
+      </div>
+      <div class="hint block" data-i18n="原理：把解析结果写成 .srt → 导入项目面板的「歌词字幕工具」素材箱 → 调用 PR 的建字幕轨接口。生成后如果位置不对，直接拖整条字幕轨或改每条字幕的入出点即可。">原理：把解析结果写成 .srt → 导入项目面板的「歌词字幕工具」素材箱 → 调用 PR 的建字幕轨接口。生成后如果位置不对，直接拖整条字幕轨或改每条字幕的入出点即可。</div>
+      <textarea id="capResult" class="log" readonly></textarea>
+    </div>
+  </section>
+
+  <!-- 图形剪辑通道已关闭（2026-10 实测）：PR 自己导出的 .mogrt 是 prgraphic，
+       文字参数（TextLayer）脚本写不进去 —— 剪辑插进去了、条数也对，
+       但屏幕上永远是模板里的占位符，而且全程不报错。只有 AE 导出的
+       aegraphic 模板才能改。「字幕升级为图形」Adobe 明确说没有 API。
+       恢复办法：把这段注释去掉，并把 app.js 里的 GFX_ENABLED 改回 true。
+       宿主侧 12_pr_graphics.jsx / API.gfxBuild 都没删，一直在。
+  <section class="sec" data-key="gfx">
+    <div class="sec-head"><span class="arrow">▼</span> <span data-i18n="② 图形剪辑（在视频轨道上批量造文字）">② 图形剪辑（在视频轨道上批量造文字）</span></div>
+    <div class="sec-body">
+      <div class="hint block" data-i18n="这一步做的事，等于你手动「Ctrl+C 复制一个调好样式的文字图层，Ctrl+V 贴 N 次，再一个个改字」——只是由脚本一次做完，而且样式一个字都不会跑。">这一步做的事，等于你手动「Ctrl+C 复制一个调好样式的文字图层，Ctrl+V 贴 N 次，再一个个改字」——只是由脚本一次做完，而且样式一个字都不会跑。</div>
+
+      <div class="row">
+        <label class="fld grow"><span data-i18n="母版来源">母版来源</span>
+          <select id="gfxSrcKind">
+            <option value="track" data-i18n="时间线上已有的剪辑（最稳，不依赖选中状态）">时间线上已有的剪辑（最稳，不依赖选中状态）</option>
+            <option value="selection" data-i18n="时间线上当前选中的剪辑">时间线上当前选中的剪辑</option>
+            <option value="project" data-i18n="项目面板里的素材（空白序列也能用）">项目面板里的素材（空白序列也能用）</option>
+            <option value="mogrt" data-i18n="MOGRT 文件（空白序列也能用）">MOGRT 文件（空白序列也能用）</option>
+          </select>
+        </label>
+        <button id="btnUseSelection" data-i18n="用当前选中剪辑">用当前选中剪辑</button>
+        <button id="btnRefreshGfx" data-i18n="刷新素材列表">刷新素材列表</button>
+      </div>
+
+      <div class="row" id="rowTrackClip">
+        <label class="fld grow"><span data-i18n="时间线上的剪辑">时间线上的剪辑</span>
+          <select id="gfxTrackClipList"><option data-i18n="（还没读取，点右边的刷新）">（还没读取，点右边的刷新）</option></select>
+        </label>
+        <button id="btnRefreshTrackClips" data-i18n="刷新剪辑列表">刷新剪辑列表</button>
+      </div>
+
+      <div class="row" id="rowMogrt" style="display:none">
+        <label class="fld grow"><span data-i18n="MOGRT 路径">MOGRT 路径</span> <input type="text" id="gfxMogrtPath" placeholder="也可以直接粘贴路径"></label>
+        <button id="btnPickMogrt" data-i18n="选择 .mogrt 文件…">选择 .mogrt 文件…</button>
+        <button id="btnScanMogrt" data-i18n="扫描自带模板">扫描自带模板</button>
+      </div>
+
+      <div class="row" id="rowMogrtList" style="display:none">
+        <label class="fld grow"><span data-i18n="PR / 系统自带模板">PR / 系统自带模板</span>
+          <select id="gfxMogrtList"><option data-i18n="（点右边「扫描自带模板」）">（点右边「扫描自带模板」）</option></select>
+        </label>
+      </div>
+
+      <div class="row" id="rowItem" style="display:none">
+        <label class="fld grow"><span data-i18n="项目面板素材">项目面板素材</span>
+          <select id="gfxItemList"><option data-i18n="（还没读取）">（还没读取）</option></select>
+        </label>
+      </div>
+
+      <div class="hint block" id="gfxSeqHint"></div>
+
+      <div class="row">
+        <label class="fld"><span data-i18n="目标视频轨">目标视频轨</span> <select id="gfxVTrack"></select></label>
+        <label class="fld"><span data-i18n="换行符">换行符</span>
+          <select id="gfxNewline">
+            <option value="\r" data-i18n="\r（PR 文字默认）">\r（PR 文字默认）</option>
+            <option value="\n" data-i18n="\n">\n</option>
+          </select>
+        </label>
+        <span class="hint" data-i18n="默认挑一条空的视频轨；覆盖式插入会把目标轨上原有的剪辑压掉">默认挑一条空的视频轨；覆盖式插入会把目标轨上原有的剪辑压掉</span>
+      </div>
+
+      <div class="row">
+        <label class="fld grow"><span data-i18n="文字参数">文字参数</span> <input type="text" id="gfxTextParam" data-i18n-placeholder="留空＝自动识别"></label>
+        <button id="btnLoadParams" data-i18n="读取选中剪辑的参数">读取选中剪辑的参数</button>
+      </div>
+      <div class="hint block" id="gfxParamInfo"></div>
+
+      <div class="row">
+        <label class="fld"><span data-i18n="字号参数（可选）">字号参数（可选）</span> <input type="text" id="gfxSizeParam" data-i18n-placeholder="参数名"></label>
+        <label class="fld"><span data-i18n="字号值">字号值</span> <input type="text" id="gfxSizeValue" class="num" value=""></label>
+        <label class="chk"><input type="checkbox" id="gfxColorOn"> <span data-i18n="设置颜色">设置颜色</span></label>
+        <label class="fld"><span data-i18n="颜色参数名">颜色参数名</span> <input type="text" id="gfxColorParam" data-i18n-placeholder="参数名"></label>
+        <input type="color" id="gfxColor" value="#ffffff">
+      </div>
+      <div class="hint block" data-i18n="字号 / 颜色是可选项：母版暴露了对应参数才填，填错不会让整批生成失败，只会在结果里提示一句。">字号 / 颜色是可选项：母版暴露了对应参数才填，填错不会让整批生成失败，只会在结果里提示一句。</div>
+
+      <div class="row">
+        <button id="btnGfxTryOne" data-i18n="试跑一条">试跑一条</button>
+        <button id="btnGfxBuild" class="primary" data-i18n="批量生成图形剪辑">批量生成图形剪辑</button>
+      </div>
+      <textarea id="gfxResult" class="log tall" readonly></textarea>
+    </div>
+  </section>
+  -->
+</div>
+
+<!-- ============================ 在线歌词 ============================ -->
+<div class="tabpane" id="tab-online">
+  <div class="panel">
+    <div class="panel-title" data-i18n="① 搜索歌曲">① 搜索歌曲</div>
+    <div class="row">
+      <label class="fld"><span data-i18n="平台">平台</span>
+        <select id="platform">
+          <option value="netease" data-i18n="网易云音乐">网易云音乐</option>
+          <option value="qq" data-i18n="QQ 音乐">QQ 音乐</option>
+        </select>
+      </label>
+      <label class="fld grow"><span data-i18n="关键词">关键词</span>
+        <input type="text" id="keyword" data-i18n-placeholder="歌名 / 歌手 / 歌曲链接 / ID">
+      </label>
+      <button id="btnSearch" class="primary" data-i18n="搜索">搜索</button>
+    </div>
+    <div class="hint" data-i18n="也可以直接粘贴歌曲链接或歌曲 ID（网易云纯数字 ID / QQ songmid）">也可以直接粘贴歌曲链接或歌曲 ID（网易云纯数字 ID / QQ songmid）</div>
+    <div class="hint" id="searchResult"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="② 搜索结果">② 搜索结果</div>
+    <select id="songList" class="listbox" size="8"></select>
+    <div class="row">
+      <button id="btnFetch" data-i18n="获取歌词（含译文）">获取歌词（含译文）</button>
+      <button id="btnUseLyric" data-i18n="载入歌词导入页">载入歌词导入页</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="③ 歌词预览">③ 歌词预览</div>
+    <textarea id="lyricPreview" class="log tall" readonly></textarea>
+  </div>
+</div>
+
+<!-- ============================ 设置 ============================ -->
+<div class="tabpane" id="tab-settings">
+  <div class="panel">
+    <div class="panel-title" data-i18n="界面语言">界面语言</div>
+    <div class="row">
+      <label class="fld grow">
+        <select id="langSel">
+          <option value="zh" data-i18n="简体中文">简体中文</option>
+          <option value="zh-Hant" data-i18n="繁体中文">繁体中文</option>
+          <option value="en">English</option>
+          <option value="ja" data-i18n="日语">日语</option>
+          <option value="auto" data-i18n="跟随系统">跟随系统</option>
+        </select>
+      </label>
+    </div>
+    <div class="hint block" data-i18n="界面语言只影响面板和脚本的提示文字；Premiere Pro 自身界面不受影响。">界面语言只影响面板和脚本的提示文字；Premiere Pro 自身界面不受影响。</div>
+    <div class="hint block" data-i18n="改完立刻生效，会记在面板本地。">改完立刻生效，会记在面板本地。</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="版本信息">版本信息</div>
+    <div class="hint block" id="settingsBuild"></div>
+    <div class="hint block" id="settingsPaths"></div>
+    <div class="row">
+      <button id="btnOpenFolder" data-i18n="打开插件文件夹">打开插件文件夹</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="面板设置">面板设置</div>
+    <div class="hint block" data-i18n="面板的设置（含语言）存在浏览器本地存储里，不会写进 .prproj 工程文件。">面板的设置（含语言）存在浏览器本地存储里，不会写进 .prproj 工程文件。</div>
+    <div class="row">
+      <button id="btnResetForm" data-i18n="恢复默认设置">恢复默认设置</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ 关于 / 自检 ============================ -->
+<div class="tabpane" id="tab-about">
+  <div class="panel">
+    <div class="panel-title" data-i18n="歌词字幕排版工具 · PR 版（CEP 面板）">歌词字幕排版工具 · PR 版（CEP 面板）</div>
+    <div class="hint block" data-i18n="把 LRC / SRT / ASS / VTT / 纯文本歌词批量排成 Premiere Pro 的字幕轨道。">把 LRC / SRT / ASS / VTT / 纯文本歌词批量排成 Premiere Pro 的字幕轨道。</div>
+    <div class="hint block" id="aboutBuild"></div>
+    <div class="row">
+      <button id="btnSelfTest" class="primary" data-i18n="运行自检">运行自检</button>
+      <button id="btnProbe" data-i18n="API 能力探测">API 能力探测</button>
+      <button id="btnProbeOnline" data-i18n="在线通道体检（会真搜一次）">在线通道体检（会真搜一次）</button>
+      <button id="btnCopyLog" data-i18n="复制结果">复制结果</button>
+    </div>
+    <textarea id="aboutLog" class="log taller" readonly></textarea>
+  </div>
+</div>
+
+<div class="statusbar"><span id="status" data-i18n="就绪">就绪</span></div>
+
+<div class="mask" id="mask"><div class="dialog">
+  <div class="dlg-title" id="dlgTitle"></div>
+  <div class="dlg-msg" id="dlgMsg"></div>
+  <div class="dlg-btns"><button id="dlgNo" data-i18n="取消">取消</button><button id="dlgYes" class="primary" data-i18n="确定">确定</button></div>
+</div></div>
+
+<script src="CSInterface.js"></script>
+<script src="i18n_en.js"></script>
+<script src="i18n_zht.js"></script>
+<script src="i18n_ja.js"></script>
+<!-- net.js 必须在 app.js 前面：app.js 的 hostCall() 要用 window.LSTNet 代宿主取网。
+     PR 的 ExtendScript 没有 system 对象，CEP 11 又严格拦 CORS，
+     所以取网这一步只能靠面板里的 Node（见 net.js 顶部注释）。 -->
+<script src="net.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

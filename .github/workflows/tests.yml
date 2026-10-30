@@ -1,0 +1,66 @@
+name: tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # 纯逻辑单测：不需要 AE / PR，也不需要装任何依赖
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 逻辑层
+        run: node tests/test_logic.js
+      - name: PR 宿主
+        run: node tests/test_pr.js
+      - name: 面板取网
+        run: node tests/test_net.js
+      - name: 多语言
+        run: node tests/test_i18n.js
+      - name: 表达式注入防护
+        run: python tests/test_atguard.py
+      - name: 跨平台路径与调试模式
+        run: python tests/test_platform.py
+
+  # 三个构建脚本在三个系统上各跑一遍。
+  # 产物本身是跨平台的（CEP 扩展就是一堆文本文件，Win/mac 同一份），
+  # 但 _platform.py 里「扩展装到哪、怎么开调试模式」是两套完全不同的代码：
+  # Windows 走注册表 + %APPDATA%，macOS 走 defaults + ~/Library。
+  # 只在 ubuntu 上跑的话，macOS 那半边永远不会被执行到。
+  build:
+    name: 构建（${{ matrix.os }}）
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      # acorn 的 ES3 严格校验要它。不下的话 es3_check.js 只会打印一行「跳过」，
+      # 构建照样绿 —— 那等于这项检查在 CI 里形同不存在。
+      - name: 准备 acorn
+        run: python _tools/fetch_acorn.py
+      # 构建脚本会做 ES3 语法 / 正则裸斜杠 / BOM / 104KB 上限 / manifest XML 校验
+      - name: 构建 ScriptUI 版
+        run: python _tools/build_AEJSX.py
+      - name: 构建 AE CEP 版
+        run: python _tools/build_AECEP.py
+      - name: 构建 PR CEP 版
+        run: python _tools/build_PRCEP.py
+      - name: 跨平台分支（本系统）
+        run: python tests/test_platform.py
