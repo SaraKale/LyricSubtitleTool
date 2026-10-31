@@ -1333,8 +1333,47 @@
 
     /* ================================================================== 样式页逻辑 */
 
+    /** 记下某个下拉框当前选中的是「哪一层」（占位项 / 没选 → null） */
+    function refSelKey(listId, offset) {
+        var list = R[listId];
+        if (!list || !list.selection || !S.refCandidates) { return null; }
+        var i = list.selection.index - offset;
+        if (i < 0 || i >= S.refCandidates.length) { return null; }
+        var comp = null;
+        try { comp = getSelectedComp(); } catch (eC) { comp = null; }
+        var c = S.refCandidates[i];
+        return { comp: comp ? comp.id : 0, index: c.index, name: c.name };
+    }
+
+    /**
+     * 把「刚才选的是哪一层」还回下拉框。
+     *
+     * 以前 refreshRefLayers 一律 selection = 0，于是「以参考图层重建」一跑完，
+     * 参考图层就自己跳回 #1 —— 用户明明选的是第 5 层，看着像脚本用错了参考层。
+     * 先按图层号找（重建时旧层被复制品顶掉，编号不变，能对上），
+     * 再按名字找（图层增删导致编号漂移时的兜底），都找不到才留在第一项。
+     */
+    function restoreRefSel(listId, offset, key) {
+        var list = R[listId];
+        if (!list || !key || !S.refCandidates) { return; }
+        var comp = null;
+        try { comp = getSelectedComp(); } catch (eC) { comp = null; }
+        if (!comp || comp.id !== key.comp) { return; }   /* 换了合成就别乱指 */
+        var i;
+        for (i = 0; i < S.refCandidates.length; i++) {
+            if (S.refCandidates[i].index === key.index) { list.selection = i + offset; return; }
+        }
+        if (!key.name) { return; }
+        for (i = 0; i < S.refCandidates.length; i++) {
+            if (S.refCandidates[i].name === key.name) { list.selection = i + offset; return; }
+        }
+    }
+
     function refreshRefLayers() {
         if (!R.refList) { return; }
+        /* 先记住两个参考层下拉框各自选的是哪一层，填完再还回去（见 restoreRefSel） */
+        var keepRef = refSelKey("refList", 0);
+        var keepRef2 = refSelKey("refList2", 1);
         updateIndexHint();
         R.refList.removeAll();
         var comp = getSelectedComp();
@@ -1357,6 +1396,8 @@
             for (var m = 0; m < names.length; m++) { R.refList2.add("item", names[m]); }
             R.refList2.selection = 0;
         }
+        restoreRefSel("refList", 0, keepRef);
+        restoreRefSel("refList2", 1, keepRef2);
         updateRefInfo();
     }
 
@@ -1774,7 +1815,7 @@
                 return;
             }
 
-            if (!askYesNo("将用参考图层「" + ref.name + "」复制出 " + targets.length +
+            if (!askYesNo("将用参考图层「#" + ref.index + " " + ref.name + "」复制出 " + targets.length +
                 " 个图层，替换掉：\n" + names.join("、") +
                 (targets.length > 4 ? " …等" : "") + "\n\n" +
                 "每层会保留自己的**文字**和**入点出点**，样式全部换成参考层的。\n" +
@@ -1808,10 +1849,24 @@
             });
 
             var lines = [];
-            lines.push("以参考图层「" + ref.name + "」重建：" + rep.ok + "/" + rep.total + " 个图层");
+            lines.push("以参考图层「#" + ref.index + " " + ref.name + "」重建：" + rep.ok + "/" + rep.total + " 个图层");
+            /* 「③ 范围」被无视了：一个符合条件的图层都没有，硬按它筛就是什么都不做。
+             * 必须说出来，不然用户以为那档设置生效了。 */
+            if (rep.scopeIgnored) {
+                lines.push("⚠ 「③ 范围」设的是「" +
+                    (rep.scopeIgnored === "same" ? "只跟参考层同组（如：只套原文）" : "只另一组（如：只套译文）") +
+                    "」，可这次一个符合条件的图层都没有，已按「全部图层」处理。");
+            }
+            /* 「怎么只重建了 1 个？」——图层号里被剔掉的那些要摊出来，
+             * 否则用户只看到一个 1/1，会以为脚本漏跑了。
+             * 两个来源合并成一行：收集阶段剔掉的（非文字 / 参考层自己 / 第二参考层）
+             * + 处理阶段跳过的（复制失败等）。 */
+            var dropped = (spec.list.length - targets.length) + rep.skipped;
+            if (dropped > 0) {
+                lines.push("跳过：" + dropped + " 个（非文字图层 / 参考图层本身 / 第二个参考层）");
+            }
             lines.push("关键帧对时：" + rep.remapped + " 个（" +
                 (mode === "scale" ? "缩放到每层入点出点" : (mode === "shift" ? "整体平移" : "不处理")) + "）");
-            if (rep.skipped > 0) { lines.push("跳过：" + rep.skipped + " 个"); }
             /* 双语的结果要写出来：不然「原文译文叠在一起」用户看不出来是哪一步的锅 */
             var gg = rep.groups || { same: 0, other: 0 };
             if (gg.same + gg.other > 0) {
@@ -1829,6 +1884,17 @@
                 lines.push("文字与入点出点已写回。可 Ctrl+Z 撤销。");
             }
             R.styleResult.text = lines.join("\n");
+            /* 「重建完成：0 个图层」不是完成，是失败 —— 以前它就这么轻轻报一句，
+             * 用户看到界面一点没变，也不知道为什么。这里当错误报出来。
+             * （「③ 范围」筛光的情况已经在 ST.rebuildFromReference 里兜住了。） */
+            if (rep.ok === 0) {
+                var why = ("一个都没重建成功：合成「" + comp.name + "」里 " + rep.total +
+                    " 个目标全失败（参考层 #" + ref.index + "「" + ref.name + "」）。" +
+                    (rep.errors.length > 0 ? ("\n\n· " + rep.errors[0]) : ""));
+                setStatus("重建失败：" + why, true);
+                notice("重建失败：\n" + why);
+                return;
+            }
             setStatus("重建完成：" + rep.ok + " 个图层");
             refreshRefLayers();
             updateIndexHint();

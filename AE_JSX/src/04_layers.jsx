@@ -480,6 +480,12 @@
             };
         }
         var same = (script === refScript);
+        /* 参考层认不出文字体系（空文字层 / 纯符号 / 纯数字）：
+         * 「按文字体系分组」这件事就没有依据了。这时一律算同组 ——
+         * 否则每一层都会被判成「另一组」，一旦 ③ 范围 选了「只跟参考层同组」，
+         * 就会把全部目标筛掉，表现成「重建完成：0 个图层」。
+         */
+        if (refScript === "other") { same = true; }
         return {
             tagged: false, script: script,
             sub: same ? 0 : 1, subCount: 2, group: "",

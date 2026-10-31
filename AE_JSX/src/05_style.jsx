@@ -950,7 +950,8 @@
         var mode = o.remapMode === undefined ? "scale" : o.remapMode;
         var report = {
             total: 0, ok: 0, remapped: 0, skipped: 0, errors: [],
-            staggered: 0, scopeSkipped: 0, groups: { same: 0, other: 0 }
+            staggered: 0, scopeSkipped: 0, groups: { same: 0, other: 0 },
+            compUnlocked: false, scopeIgnored: ""
         };
         if (!comp || !refLayer || !targets || targets.length === 0) { return report; }
 
@@ -978,6 +979,29 @@
             keyframeInterpolation: true, keyframeEase: true, expressions: true
         };
 
+        /* ---------------------------------------------------------- 先认一遍角色
+         *
+         * 两个用途：
+         *   ① 分组统计（同组 / 另一组各多少层）
+         *   ② **判断「③ 范围」会不会把所有目标都筛掉** —— 一个都不剩的过滤等于让
+         *      按钮失效。用户常常根本没意识到这个下拉还停在别的档上（它存在面板
+         *      localStorage 里，试过一次双语就一直留着），结果就是「重建完成：0 个」。
+         *      这种情况直接按「全部图层」处理，并在结果里说清楚。
+         *
+         * 顺便省一次读文字：loop 里不再重复算 roleOf。
+         */
+        var roles = [], cntSame = 0, cntOther = 0, ri, rl;
+        for (ri = 0; ri < targets.length; ri++) {
+            rl = null;
+            try { rl = LY.roleOf(targets[ri], refLayer); } catch (eRr) { rl = null; }
+            roles.push(rl);
+            if (rl) {
+                if (rl.sameAsRef) { cntSame++; } else { cntOther++; }
+            }
+        }
+        if (biScope === "same" && cntSame === 0) { biScope = "all"; report.scopeIgnored = "same"; }
+        if (biScope === "other" && cntOther === 0) { biScope = "all"; report.scopeIgnored = "other"; }
+
         function progress(done, total) {
             if (typeof o.onProgress === "function") {
                 try { o.onProgress(done, total); } catch (eP) { }
@@ -985,6 +1009,25 @@
         }
 
         app.beginUndoGroup(SB.M("以参考图层重建"));
+        /* 合成被锁定时 AE 直接拒绝 duplicate() —— 每层都失败，最后就成了
+         * 「重建完成：0 个图层」，界面上还看不出原因。这里临时解锁，finally 里还原。 */
+        var compWasLocked = false;
+        try { compWasLocked = comp.locked; } catch (eCL) { compWasLocked = false; }
+        if (compWasLocked) {
+            try { comp.locked = false; } catch (eCL2) { }
+        }
+        report.compUnlocked = compWasLocked;
+        /* 参考层自己是锁定的也不行：duplicate() 出来的副本会跟着锁上，
+         * 之后 setLayerTextOnly 写不进文字（AE 静默拒绝），
+         * 结果就是「层重建了但文字还是参考层那句」。临时解锁，finally 里还原。 */
+        var refWasLocked = false;
+        try { refWasLocked = refLayer.locked; } catch (eRL) { refWasLocked = false; }
+        if (refWasLocked) { try { refLayer.locked = false; } catch (eRL2) { } }
+        var ref2WasLocked = false;
+        if (ref2) {
+            try { ref2WasLocked = ref2.locked; } catch (eR2L) { ref2WasLocked = false; }
+            if (ref2WasLocked) { try { ref2.locked = false; } catch (eR2L2) { } }
+        }
         try {
             for (var i = 0; i < targets.length; i++) {
                 var tgt = targets[i];
@@ -992,9 +1035,8 @@
                 if (!tgt) { report.skipped++; continue; }
                 if (tgt === refLayer || (ref2 && tgt === ref2)) { report.skipped++; continue; }
 
-                /* 认角色 → 决定「处理不处理」「用哪个参考层」 */
-                var role = null;
-                try { role = LY.roleOf(tgt, refLayer); } catch (eR1) { role = null; }
+                /* 认角色 → 决定「处理不处理」「用哪个参考层」（上面已经预扫过） */
+                var role = roles[i];
                 if (role) {
                     if (role.sameAsRef) { report.groups.same++; } else { report.groups.other++; }
                 }
@@ -1081,6 +1123,9 @@
         } catch (e) {
             report.errors.push(SB.M("重建中断：%1", e.toString()));
         } finally {
+            if (refWasLocked) { try { refLayer.locked = true; } catch (eRL3) { } }
+            if (ref2 && ref2WasLocked) { try { ref2.locked = true; } catch (eR2L3) { } }
+            if (compWasLocked) { try { comp.locked = true; } catch (eCL3) { } }
             app.endUndoGroup();
         }
         return report;

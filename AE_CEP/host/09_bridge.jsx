@@ -994,7 +994,9 @@
         if (!a.confirmed) {
             return {
                 ok: false, needConfirm: {
-                    kind: "rebuild", ref: ref.name, count: targets.length,
+                    /* 带图层号：光有名字的话，用户没法确认「它到底拿的哪一层」
+                     * —— 参考图层跳回 #1 时，名字可能还很像，编号不会骗人。 */
+                    kind: "rebuild", ref: ("#" + ref.index + " " + ref.name), count: targets.length,
                     names: names, more: targets.length > 4
                 }
             };
@@ -1020,10 +1022,26 @@
         progClear();
 
         var lines = [];
-        lines.push(SB.M("以参考图层「%1」重建：%2/%3 个图层", ref.name, rep.ok, rep.total));
+        lines.push(SB.M("以参考图层「%1」重建：%2/%3 个图层",
+            ("#" + ref.index + " " + ref.name), rep.ok, rep.total));
+        /* 「③ 范围」被无视了：一个符合条件的图层都没有，硬按它筛就是什么都不做。
+         * 必须说出来，不然用户以为那档设置生效了（他往往根本不知道它停在那档）。 */
+        if (rep.scopeIgnored) {
+            lines.push(SB.M("⚠ 「③ 范围」设的是「%1」，可这次一个符合条件的图层都没有，已按「全部图层」处理。",
+                (rep.scopeIgnored === "same"
+                    ? SB.M("只跟参考层同组（如：只套原文）")
+                    : SB.M("只另一组（如：只套译文）"))));
+        }
+        /* 「怎么只重建了 1 个？」——图层号里被剔掉的那些要摊出来，
+         * 否则用户只看到一个 1/1，会以为脚本漏跑了。
+         * 两个来源合并成一行：收集阶段剔掉的（非文字 / 参考层自己 / 第二参考层）
+         * + 处理阶段跳过的（复制失败等）。 */
+        var dropped = (spec.list.length - targets.length) + rep.skipped;
+        if (dropped > 0) {
+            lines.push(SB.M("跳过：%1 个（非文字图层 / 参考图层本身 / 锁定）", dropped));
+        }
         lines.push(SB.M("关键帧对时：%1 个（%2）", rep.remapped,
             (mode === "scale" ? SB.M("缩放到每层入点出点") : (mode === "shift" ? SB.M("整体平移") : SB.M("不处理")))));
-        if (rep.skipped > 0) { lines.push(SB.M("跳过：%1 个", rep.skipped)); }
 
         /* 双语的结果要写在明面上：不然「原文译文叠在一起」这种问题，
          * 用户只看「重建 N 个图层」是看不出来的。 */
@@ -1051,6 +1069,17 @@
             for (var j = 0; j < Math.min(rep.errors.length, 6); j++) { lines.push("· " + rep.errors[j]); }
         } else {
             lines.push(SB.M("文字与入点出点已写回。可 Ctrl+Z 撤销。"));
+        }
+
+        /* 「重建完成：0 个图层」不是完成，是失败 —— 以前它就这么轻轻报一句，
+         * 用户看到界面一点没变，也完全不知道为什么。这里把它当错误弹出来。
+         * （「③ 范围」筛光的情况已经在 ST.rebuildFromReference 里兜住了：
+         *   一个符合条件的目标都没有时它会按「全部图层」跑，不会走到这里。） */
+        if (rep.ok === 0) {
+            var why = SB.M("一个都没重建成功：合成「%1」里 %2 个目标全失败（参考层 #%3「%4」）。",
+                comp.name, rep.total, ref.index, ref.name);
+            if (rep.errors.length > 0) { why += "\n\n· " + rep.errors[0]; }
+            return { ok: false, error: why, lines: lines };
         }
         push(SB.M("重建完成：%1 个图层", rep.ok));
         return { ok: true, lines: lines };

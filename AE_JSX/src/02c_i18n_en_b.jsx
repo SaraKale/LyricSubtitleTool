@@ -11,6 +11,8 @@
 (function () {
     var root = (typeof SB === "undefined") ? (SB = {}) : SB;
     var t = {
+        "恢复": "Restore",
+        "恢复默认设置": "Reset to defaults",
         "成功生成：%1 / %2 条": "Generated successfully: %1 / %2",
         "打关键帧失败：%1 @%2（%3）": "Setting keyframes failed: %1 @%2 (%3)",
         "打开插件文件夹": "Open extension folder",

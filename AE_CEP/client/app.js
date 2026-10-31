@@ -124,6 +124,8 @@
     var state = {
         comps: [],
         textLayers: [],
+        textLayersComp: -1,   // textLayers 这份清单属于哪个合成（刷新时保住参考图层选择用）
+        sel: null,            // 三个下拉框「上次选的是哪一层」，见 rememberSel
         presets: [],
         fontPs: [""],
         songs: [],
@@ -607,10 +609,55 @@
             : "";
     }
 
-    function refreshTextLayers() {
+    /**
+     * 记住「三个下拉框各自选的是哪一层」，刷新完再还回去。
+     *
+     * 以前刷新清单（换合成 / 点刷新 / 重建完）一律把选中项打回第 0 项，
+     * 参考图层就自己跳回 #1 —— 用户明明选的是第 5 层，一按「以参考图层重建」
+     * 界面就变成 #1，看起来像是脚本用错了参考层。
+     *
+     * 还原顺序：先按图层号找（重建时旧层被复制品顶掉，编号不变，能对上），
+     * 找不到再按名字找（图层增删导致编号漂移时的兜底），都没有就保持第 0 项。
+     */
+    function rememberSel(listId, offset) {
+        var arr = state.textLayers || [];
+        var i = sel(listId) - offset;
+        var t = (i >= 0 && i < arr.length) ? arr[i] : null;
+        if (!state.sel) { state.sel = {}; }
+        /* 记「这份清单属于哪个合成」，不是记当前下拉框的值：
+         * refreshComps 会先把 compList 切到 AE 的活动合成，再刷清单 ——
+         * 用 compIndex() 的话会把上一份清单的图层号记到新合成头上。 */
+        state.sel[listId] = t ? { comp: state.textLayersComp, layer: t.index, name: t.name } : null;
+    }
+
+    function restoreSel(listId, offset) {
+        var rec = state.sel ? state.sel[listId] : null;
+        if (!rec || rec.comp !== compIndex()) { return; }
+        var arr = state.textLayers || [];
+        var i;
+        for (i = 0; i < arr.length; i++) {
+            if (arr[i].index === rec.layer) { $(listId).selectedIndex = i + offset; return; }
+        }
+        if (!rec.name) { return; }
+        for (i = 0; i < arr.length; i++) {
+            if (arr[i].name === rec.name) { $(listId).selectedIndex = i + offset; return; }
+        }
+    }
+
+    /**
+     * @param {Boolean} resetSel 换合成时传 true：不要沿用上一个合成的选择，
+     *                           三个下拉框都回到第一项（否则会在新合成里乱指一层）
+     */
+    function refreshTextLayers(resetSel) {
+        if (!resetSel) {
+            rememberSel("refList", 0);
+            rememberSel("refList2", 1);
+            rememberSel("tplList", 1);
+        }
         return call("textLayers", { compIndex: compIndex() }).then(function (r) {
             if (!r.ok) { return; }
             state.textLayers = r.layers || [];
+            state.textLayersComp = compIndex();
             var names = [];
             for (var i = 0; i < state.textLayers.length; i++) {
                 names.push("#" + state.textLayers[i].index + "  " + state.textLayers[i].name);
@@ -619,6 +666,11 @@
             fillSelect($("refList"), names, 0);
             fillSelect($("refList2"), [T("（不用 —— 两组都用同一个参考层）")].concat(names), 0);
             fillSelect($("tplList"), [T("（不使用 —— 按排版样式新建）")].concat(names), 0);
+            if (!resetSel) {
+                restoreSel("refList", 0);
+                restoreSel("refList2", 1);
+                restoreSel("tplList", 1);
+            }
             $("tplInfo").textContent = state.textLayers.length > 0
                 ? T("当前合成里有 %1 个文字图层可以当模板。\n选一个，生成时就会复制它（图层样式 / 效果 / 动画器全带走），只换文字和时间。", state.textLayers.length)
                 : T("当前合成里还没有文字图层。先手动做一个满意的样式，再回来选它当模板。");
@@ -664,6 +716,7 @@
                 for (var j = 0; j < state.textLayers.length; j++) {
                     if (state.textLayers[j].index === r.index) {
                         $(listId).selectedIndex = j + offset;
+                        rememberSel(listId, offset);
                         updateRefInfo();
                         updateIndexHint();
                         setStatus(T("已获取到选中的第 %1 层「%2」%3", r.index, r.name,
@@ -1082,10 +1135,17 @@
         }).then(function (r) {
             if (!r) { return; }
             stopProgress();
+            /* 失败也要把宿主给的明细填进结果框：报错只说一句话，
+             * 真正的原因（哪一层、什么错）都在 lines 里。 */
+            if (r.lines && r.lines.length) { $("styleResult").value = r.lines.join("\n"); }
             if (!r.ok) { setStatus(T("重建失败：%1", r.error), "err"); alertBox(T("重建失败"), r.error); return; }
             $("styleResult").value = (r.lines || []).join("\n");
             setStatus(T("重建完成"), "ok");
-            return refreshComps();
+            /* 只刷图层清单，**不要** refreshComps()：那个会把合成下拉框切到
+             * AE 的「活动合成」，用户明明在 A 合成里操作，一按完面板就跳到 B，
+             * 参考图层跟着变成 B 里的 #1 —— 看起来就像脚本用错了参考层。
+             * 重建只换层、不动合成，刷清单就够了（图层号不变，选择也能保住）。 */
+            return refreshTextLayers();
         });
     }
 
@@ -1298,7 +1358,7 @@
         $("btnRefreshComp").onclick = function () { refreshComps(); };
         $("compList").onchange = function () {
             updatePosHint();
-            refreshTextLayers();
+            refreshTextLayers(true);   /* 换了合成：三个下拉框重新从第一项开始 */
         };
         $("btnGetCenter").onclick = function () {
             var c = state.comps[compIndex()];
@@ -1373,7 +1433,7 @@
 
         /* --- 样式同步页 --- */
         $("btnRefRefresh").onclick = function () { refreshComps(); };
-        $("refList").onchange = function () { updateRefInfo(); updateIndexHint(); };
+        $("refList").onchange = function () { rememberSel("refList", 0); updateRefInfo(); updateIndexHint(); };
         $("btnRefPick").onclick = function () { pickSelected("refList", 0); };
         $("btnAllLayers").onclick = function () {
             var c = state.comps[compIndex()];
@@ -1386,7 +1446,7 @@
         /* --- 样式同步页：③ 双语图层 --- */
         $("btnPairScan").onclick = function () { scanPairs(); };
         $("btnRefPick2").onclick = function () { pickSelected("refList2", 1); };
-        $("refList2").onchange = function () { updateBiInfo(); };
+        $("refList2").onchange = function () { rememberSel("refList2", 1); updateBiInfo(); };
         $("biPos").onchange = function () { updateBiInfo(); };
         $("biScope").onchange = function () { updateBiInfo(); };
         $("biStep").oninput = function () { updateBiInfo(); };
