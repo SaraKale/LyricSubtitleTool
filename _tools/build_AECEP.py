@@ -73,8 +73,18 @@ ORDER = [
 EXT_ID = "com.sarakale.lyricsubtitle.panel"
 BUNDLE_ID = "com.sarakale.lyricsubtitle"
 
+# manifest 的 schema 版本 / CEP 运行时下限：写 7.0，别跟着最新宿主版本走。
+# CEP 会拒绝解析比自己更新的 ExtensionManifest Version —— AE 2021 的 18.0~18.3
+# 用的是 CEP 9/10（18.4 起才是 CEP 11），看到 11.0 就报
+# 「Unsupported Manifest version」，扩展不注册、菜单里根本没有，且没有任何提示。
+# 7.0 是 XSD 最后一次变更的版本（CEP 7 起元素没再变），PR 版要用的
+# --mixed-context 也正好是 CEP 7.0 引入；CEP 9/10/11/12 全都认 7.0。
+# tests/test_manifest.py 会盯着这两个数，别再调回 11.0。
+MANIFEST_VERSION = "7.0"
+CSXS_RANGE = "[7.0,99.0]"
+
 MANIFEST = """<?xml version="1.0" encoding="UTF-8"?>
-<ExtensionManifest Version="11.0"
+<ExtensionManifest Version="{mver}"
                    ExtensionBundleId="{bundle}"
                    ExtensionBundleVersion="{ver}"
                    ExtensionBundleName="{name}">
@@ -338,7 +348,8 @@ def build():
     ver = read_version()
     with open(os.path.join(DIST, "CSXS", "manifest.xml"), "w", encoding="utf-8", newline="\n") as f:
         f.write(MANIFEST.format(bundle=BUNDLE_ID, ext=EXT_ID, ver=ver,
-                                name=BUNDLE_NAME, csxs="[11.0,99.0]"))
+                                name=BUNDLE_NAME, mver=MANIFEST_VERSION,
+                                csxs=CSXS_RANGE))
     with open(os.path.join(DIST, ".debug"), "w", encoding="utf-8", newline="\n") as f:
         f.write(DEBUG_FILE.format(ext=EXT_ID))
     print("[OK] CSXS/manifest.xml（v%s）+ .debug 已生成" % ver)

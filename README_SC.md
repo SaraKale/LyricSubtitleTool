@@ -92,7 +92,8 @@ for v in 9 10 11 12 13 14; do
 done
 ```
 
-> 老版本宿主可能不认 `CSXS.11`，所以上面两种办法都是把 9~14 一次性全写，不用挑。
+> `CSXS.11` 只对应 CEP 11 的宿主；AE 2021（18.0~18.3）等老宿主读的是 `CSXS.10` / `CSXS.9`。
+> 手动改注册表时按自己的版本选，拿不准就双击 `Add Keys.reg` —— 它会把 9~14 一次写全。
 
 ### 第 3 步 重启宿主
 
@@ -116,8 +117,14 @@ CEP 只在进程启动时扫一次扩展目录，不重启是看不到的。
    `defaults read com.adobe.CSXS.11 PlayerDebugMode`）
 3. 扩展目录结构对不对 —— 必须是 `extensions\LyricSubtitleTool_AE\CSXS\manifest.xml`
 4. 还是不行就看日志：
-   `%TEMP%\CEP11-AEFT.log` / `%TEMP%\CEP11-PPRO.log`（macOS 在 `~/Library/Logs/CSXS/`），
+   `%TEMP%\CEP9-AEFT.log` / `CEP10-AEFT.log` / `CEP11-AEFT.log`…（PR 同理，数字是宿主
+   集成的 CEP 版本，老版本宿主不是 11；macOS 在 `~/Library/Logs/CSXS/`），
    里面出现 `DevTools listening on ws://…` 说明面板加载成功，问题在面板内部
+5. 日志里有 `Unsupported Manifest version`，说明宿主集成的 CEP 比扩展要求的旧 ——
+   早期包把 manifest 写死成 `11.0`，而 AE 2021（18.0~18.3）用的是 CEP 9/10，
+   宿主会直接拒绝注册，表现就是菜单里根本没有这个扩展。换修复版；或者把已装目录里
+   `CSXS/manifest.xml` 的 `Version="11.0"` 改成 `"7.0"`、`[11.0,99.0]` 改成
+   `[7.0,99.0]`，保存后完全退出宿主再打开（扩展 ID 没变，面板设置不会丢）。
 
 ### AE 的另一种形态：ScriptUI 单脚本版
 

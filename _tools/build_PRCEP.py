@@ -84,8 +84,15 @@ ORDER = SHARED_ORDER + PR_ORDER + [BRIDGE]
 EXT_ID = "com.sarakale.lyricsubtitle.pr.panel"
 BUNDLE_ID = "com.sarakale.lyricsubtitle.pr"
 
+# 和 AE 版同理：manifest 写 11.0 会把 CEP 9/10 的宿主全部挡在门外
+# （PR 2020 的 14.0~14.3 是 CEP 9、14.4 是 CEP 10，15.4 起才是 CEP 11）。
+# 7.0 是 --enable-nodejs / --mixed-context 都可用的最低 schema 版本。
+# 详细背景与回归检查见 build_AECEP.py 的注释和 tests/test_manifest.py。
+MANIFEST_VERSION = "7.0"
+CSXS_RANGE = "[7.0,99.0]"
+
 MANIFEST = """<?xml version="1.0" encoding="UTF-8"?>
-<ExtensionManifest Version="11.0"
+<ExtensionManifest Version="{mver}"
                    ExtensionBundleId="{bundle}"
                    ExtensionBundleVersion="{ver}"
                    ExtensionBundleName="{name}">
@@ -103,7 +110,7 @@ MANIFEST = """<?xml version="1.0" encoding="UTF-8"?>
       <Locale Code="All"/>
     </LocaleList>
     <RequiredRuntimeList>
-      <RequiredRuntime Name="CSXS" Version="[11.0,99.0]"/>
+      <RequiredRuntime Name="CSXS" Version="{csxs}"/>
     </RequiredRuntimeList>
   </ExecutionEnvironment>
   <DispatchInfoList>
@@ -405,13 +412,15 @@ def build():
     ver = read_version()
     with open(os.path.join(DIST, "CSXS", "manifest.xml"), "w",
               encoding="utf-8", newline="\n") as f:
-        f.write(MANIFEST.format(bundle=BUNDLE_ID, ext=EXT_ID, ver=ver, name=BUNDLE_NAME))
+        f.write(MANIFEST.format(bundle=BUNDLE_ID, ext=EXT_ID, ver=ver,
+                                name=BUNDLE_NAME, mver=MANIFEST_VERSION,
+                                csxs=CSXS_RANGE))
     with open(os.path.join(DIST, ".debug"), "w", encoding="utf-8", newline="\n") as f:
         f.write(DEBUG_FILE.format(ext=EXT_ID))
     print("[OK] CSXS/manifest.xml（v%s，Host=PPRO）+ .debug 已生成" % ver)
 
     # XML 写坏了 CEP 是**静默拒绝**的（扩展菜单里根本不出现，一句报错都没有，
-    # 只能去 %TEMP%\CEP11-PPRO.log 里翻），所以这里必须用真解析器过一遍再往下走。
+    # 只能去 %TEMP%\CEP<n>-PPRO.log 里翻），所以这里必须用真解析器过一遍再往下走。
     # 实现放在 build_AEJSX.py 里，AE 版（build_AECEP.py）共用同一份。
     try:
         import build_AEJSX as bmod

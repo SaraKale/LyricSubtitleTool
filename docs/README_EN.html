@@ -794,8 +794,9 @@ create a String value <code>PlayerDebugMode</code> and set it to <code>1</code><
 <span class="token keyword">done</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div>
 <blockquote>
-<p class="source-line" data-source-line="93">Older hosts may not honour <code>CSXS.11</code>, so both methods write 9–14 in one go — no need to guess<br>
-which version you have.</p>
+<p class="source-line" data-source-line="93"><code>CSXS.11</code> is only for hosts on CEP 11; older hosts such as AE 2021 (18.0–18.3) read<br>
+<code>CSXS.10</code> / <code>CSXS.9</code>. Pick the matching key when editing the registry by hand, or just<br>
+double-click <code>Add Keys.reg</code>, which writes 9–14 in one go.</p>
 </blockquote>
 <h3 id="step-3-—-restart-the-host" class="source-line" data-source-line="96">Step 3 — Restart the host<a class="vx-header-anchor" href="#step-3-—-restart-the-host" vx-data-anchor-icon="¶"></a></h3>
 <p class="source-line" data-source-line="98"><strong>Fully quit</strong> After Effects / Premiere Pro, then launch it again.<br>
@@ -819,9 +820,10 @@ loaded. Titles <em>inside</em> the panel do follow the language setting.</p>
 run <code>defaults read com.adobe.CSXS.11 PlayerDebugMode</code>)</li>
 <li class="source-line" data-source-line="118">Is the folder structure right? It has to be <code>extensions\LyricSubtitleTool_AE\CSXS\manifest.xml</code></li>
 <li class="source-line" data-source-line="119">Still nothing? Read the log:<br>
-<code>%TEMP%\CEP11-AEFT.log</code> / <code>%TEMP%\CEP11-PPRO.log</code> (on macOS: <code>~/Library/Logs/CSXS/</code>).<br>
+<code>%TEMP%\CEP9-AEFT.log</code> / <code>CEP10-AEFT.log</code> / <code>CEP11-AEFT.log</code>… (same for PPRO; the number is the CEP version integrated into your host, and older hosts are not 11; on macOS: <code>~/Library/Logs/CSXS/</code>).<br>
 A line containing <code>DevTools listening on ws://…</code> means the panel loaded fine and the problem<br>
 is inside the panel.</li>
+<li class="source-line" data-source-line="124"><code>Unsupported Manifest version</code> in the log means the host's CEP is older than the extension requires. Early builds hardcoded <code>11.0</code>, while AE 2021 (18.0–18.3) ships CEP 9/10, so the host refuses to register the extension at all — it simply never appears in the menu. Get the fixed build, or edit <code>CSXS/manifest.xml</code> in the installed folder: change <code>Version="11.0"</code> to <code>"7.0"</code> and <code>[11.0,99.0]</code> to <code>[7.0,99.0]</code>, save, then fully quit and reopen the host (the extension ID is unchanged, so panel settings are kept).</li>
 </ol>
 <h3 id="the-other-ae-flavour:-scriptui-single-script-version" class="source-line" data-source-line="124">The other AE flavour: ScriptUI single-script version<a class="vx-header-anchor" href="#the-other-ae-flavour:-scriptui-single-script-version" vx-data-anchor-icon="¶"></a></h3>
 <p class="source-line" data-source-line="126">A fallback for when the CEP panel refuses to load. Same features, but the UI is old-school<br>

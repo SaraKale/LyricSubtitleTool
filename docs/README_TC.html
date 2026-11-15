@@ -792,7 +792,8 @@ WebVTT、純文字（一行一句依固定時長排）。GBK / UTF-8 自動辨�
 <span class="token keyword">done</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div>
 <blockquote>
-<p class="source-line" data-source-line="91">舊版宿主可能不認 <code>CSXS.11</code>，所以上面兩種辦法都是把 9~14 一次全寫，不用挑。</p>
+<p class="source-line" data-source-line="91"><code>CSXS.11</code> 只對應 CEP 11 的宿主；AE 2021（18.0~18.3）等舊宿主讀的是 <code>CSXS.10</code> / <code>CSXS.9</code>。<br>
+手動改登錄檔時按自己的版本選，拿不準就雙擊 <code>Add Keys.reg</code> —— 它會把 9~14 一次寫全。</p>
 </blockquote>
 <h3 id="第-3-步-重啟宿主" class="source-line" data-source-line="93">第 3 步 重啟宿主<a class="vx-header-anchor" href="#第-3-步-重啟宿主" vx-data-anchor-icon="¶"></a></h3>
 <p class="source-line" data-source-line="95"><strong>完全結束</strong> After Effects / Premiere Pro 再重新開啟。<br>
@@ -814,8 +815,9 @@ CEP 只在行程啟動時掃一次擴充功能目錄，不重啟是看不到的�
 <code>defaults read com.adobe.CSXS.11 PlayerDebugMode</code>）</li>
 <li class="source-line" data-source-line="113">擴充功能目錄結構對不對 —— 必須是 <code>extensions\LyricSubtitleTool_AE\CSXS\manifest.xml</code></li>
 <li class="source-line" data-source-line="114">還是不行就看日誌：<br>
-<code>%TEMP%\CEP11-AEFT.log</code> / <code>%TEMP%\CEP11-PPRO.log</code>（macOS 在 <code>~/Library/Logs/CSXS/</code>），<br>
+<code>%TEMP%\CEP9-AEFT.log</code> / <code>CEP10-AEFT.log</code> / <code>CEP11-AEFT.log</code>…（PR 同理，數字是宿主整合的 CEP 版本，舊版宿主不是 11；macOS 在 <code>~/Library/Logs/CSXS/</code>），<br>
 裡面出現 <code>DevTools listening on ws://…</code> 代表面板載入成功，問題在面板內部</li>
+<li class="source-line" data-source-line="118">日誌裡出現 <code>Unsupported Manifest version</code>，代表宿主整合的 CEP 比擴充功能要求的舊 —— 早期套件把 manifest 寫死成 <code>11.0</code>，而 AE 2021（18.0~18.3）用的是 CEP 9/10，宿主會直接拒絕註冊，表現就是選單裡根本沒有這個擴充功能。換修復版；或是把已安裝目錄裡 <code>CSXS/manifest.xml</code> 的 <code>Version="11.0"</code> 改成 <code>"7.0"</code>、<code>[11.0,99.0]</code> 改成 <code>[7.0,99.0]</code>，存檔後完全結束宿主再開啟（擴充功能 ID 沒變，面板設定不會掉）。</li>
 </ol>
 <h3 id="ae-的另一種形態：scriptui-單腳本版" class="source-line" data-source-line="118">AE 的另一種形態：ScriptUI 單腳本版<a class="vx-header-anchor" href="#ae-的另一種形態：scriptui-單腳本版" vx-data-anchor-icon="¶"></a></h3>
 <p class="source-line" data-source-line="120">CEP 面板載入不了時的備用方案，功能一樣，介面是舊式 ExtendScript 控制項（沒有捲軸）。</p>

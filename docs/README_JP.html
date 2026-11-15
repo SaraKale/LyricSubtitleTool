@@ -792,8 +792,9 @@ OS：<strong>Windows / macOS</strong>。Linux は非対応 —— Adobe は PR /
 <span class="token keyword">done</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div>
 <blockquote>
-<p class="source-line" data-source-line="91">古いバージョンのホストは <code>CSXS.11</code> を認識しないことがあるため、どちらの方法も 9〜14 をまとめて書き込みます。<br>
-どれが必要か悩む必要はありません。</p>
+<p class="source-line" data-source-line="91"><code>CSXS.11</code> は CEP 11 のホスト専用です。AE 2021（18.0~18.3）などの古いホストは<br>
+<code>CSXS.10</code> / <code>CSXS.9</code> を参照します。手動でレジストリを編集する場合はバージョンに合うキーを<br>
+選んでください。分からなければ <code>Add Keys.reg</code> をダブルクリックすれば 9〜14 をまとめて書き込みます。</p>
 </blockquote>
 <h3 id="ステップ-3-ホストを再起動" class="source-line" data-source-line="94">ステップ 3 ホストを再起動<a class="vx-header-anchor" href="#ステップ-3-ホストを再起動" vx-data-anchor-icon="¶"></a></h3>
 <p class="source-line" data-source-line="96">After Effects / Premiere Pro を<strong>完全に終了</strong>してから起動し直します。<br>
@@ -816,8 +817,9 @@ CEP はプロセス起動時に一度だけ拡張機能フォルダーを走査�
 <code>defaults read com.adobe.CSXS.11 PlayerDebugMode</code>）</li>
 <li class="source-line" data-source-line="115">フォルダー構造が正しいか —— <code>extensions\LyricSubtitleTool_AE\CSXS\manifest.xml</code> である必要があります</li>
 <li class="source-line" data-source-line="116">それでもだめならログを確認：<br>
-<code>%TEMP%\CEP11-AEFT.log</code> / <code>%TEMP%\CEP11-PPRO.log</code>（macOS は <code>~/Library/Logs/CSXS/</code>）。<br>
+<code>%TEMP%\CEP9-AEFT.log</code> / <code>CEP10-AEFT.log</code> / <code>CEP11-AEFT.log</code>…（PR も同様。数字はホストが統合している CEP のバージョンで、古いホストは 11 ではありません。macOS は <code>~/Library/Logs/CSXS/</code>）。<br>
 中に <code>DevTools listening on ws://…</code> があればパネル自体は読み込めており、問題はパネル内部にあります</li>
+<li class="source-line" data-source-line="120">ログに <code>Unsupported Manifest version</code> と出る場合、ホストの CEP が拡張機能の要求より古いということです。初期のパッケージは manifest を <code>11.0</code> 固定にしていましたが、AE 2021（18.0~18.3）の CEP は 9/10 のため、ホストが登録を拒否し、メニューに拡張機能がまったく出ません。修正版に差し替えてください。またはインストール済みフォルダーの <code>CSXS/manifest.xml</code> で <code>Version="11.0"</code> を <code>"7.0"</code>、<code>[11.0,99.0]</code> を <code>[7.0,99.0]</code> に書き換えて保存し、ホストを完全に終了してから起動し直してください（拡張機能 ID は変わらないのでパネル設定は保持されます）。</li>
 </ol>
 <h3 id="ae-のもうひとつの形：scriptui-単一スクリプト版" class="source-line" data-source-line="120">AE のもうひとつの形：ScriptUI 単一スクリプト版<a class="vx-header-anchor" href="#ae-のもうひとつの形：scriptui-単一スクリプト版" vx-data-anchor-icon="¶"></a></h3>
 <p class="source-line" data-source-line="122">CEP パネルが読み込めないときの代替手段です。機能は同じですが、UI は旧来の ExtendScript ウィジェット（スクロールバーなし）です。</p>

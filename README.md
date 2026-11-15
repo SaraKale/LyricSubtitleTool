@@ -91,8 +91,9 @@ for v in 9 10 11 12 13 14; do
 done
 ```
 
-> Older hosts may not honour `CSXS.11`, so both methods write 9–14 in one go — no need to guess
-> which version you have.
+> `CSXS.11` is only for hosts on CEP 11; older hosts such as AE 2021 (18.0–18.3) read
+> `CSXS.10` / `CSXS.9`. Pick the matching key when editing the registry by hand, or just
+> double-click `Add Keys.reg`, which writes 9–14 in one go.
 
 ### Step 3 — Restart the host
 
@@ -118,9 +119,16 @@ Check in this order:
    run `defaults read com.adobe.CSXS.11 PlayerDebugMode`)
 3. Is the folder structure right? It has to be `extensions\LyricSubtitleTool_AE\CSXS\manifest.xml`
 4. Still nothing? Read the log:
-   `%TEMP%\CEP11-AEFT.log` / `%TEMP%\CEP11-PPRO.log` (on macOS: `~/Library/Logs/CSXS/`).
-   A line containing `DevTools listening on ws://…` means the panel loaded fine and the problem
-   is inside the panel.
+   `%TEMP%\CEP9-AEFT.log` / `CEP10-AEFT.log` / `CEP11-AEFT.log`… (same for PPRO; the number is
+   the CEP version integrated into your host, and older hosts are not 11; on macOS:
+   `~/Library/Logs/CSXS/`). A line containing `DevTools listening on ws://…` means the panel
+   loaded fine and the problem is inside the panel.
+5. `Unsupported Manifest version` in the log means the host's CEP is older than the extension
+   requires. Early builds hardcoded `11.0`, while AE 2021 (18.0–18.3) ships CEP 9/10, so the
+   host refuses to register the extension at all — it simply never appears in the menu. Get the
+   fixed build, or edit `CSXS/manifest.xml` in the installed folder: change `Version="11.0"` to
+   `"7.0"` and `[11.0,99.0]` to `[7.0,99.0]`, save, then fully quit and reopen the host (the
+   extension ID is unchanged, so panel settings are kept).
 
 ### The other AE flavour: ScriptUI single-script version
 
